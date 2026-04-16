@@ -672,6 +672,13 @@ function activateTab(index) {
   navItems[index].classList.add('active');
   views.forEach(x => x.classList.remove('active'));
   document.getElementById(`view-${index}`).classList.add('active');
+  
+  // Hide the dynamic island on the Music tab (index 4)
+  if (index === 4) {
+    island.style.display = 'none';
+  } else {
+    island.style.display = 'flex';
+  }
 }
 navItems.forEach((el, index) => el.addEventListener('click', () => activateTab(index)));
 document.getElementById('homeRsvpBtn').addEventListener('click', () => activateTab(2));

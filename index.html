@@ -332,13 +332,13 @@ body { background: radial-gradient(circle at top, #ff8fc0, #7aa6ff 60%, #5f7cff)
           <div class="am-title" id="amTitle">They Wanna F**k</div>
           <div class="am-artist" id="amArtist">Kim Petras</div>
         </div>
-        <div class="am-action-right">
-          <button class="am-icon-btn"><span class="emoji">☆</span></button>
-          <button class="am-icon-btn-plain"><span class="emoji">⋯</span></button>
+       <div class="am-action-right">
+          <button class="am-icon-btn" id="btnStar"><span class="emoji">☆</span></button>
+          <button class="am-icon-btn-plain" id="btnMore"><span class="emoji">⋯</span></button>
         </div>
       </div>
 
-      <div class="am-scrubber-container">
+      <div class="am-scrubber-container" id="amScrubber" style="cursor: pointer;">
         <div class="am-progress">
           <div class="am-progress-fill" id="amProgress"></div>
         </div>
@@ -361,8 +361,8 @@ body { background: radial-gradient(circle at top, #ff8fc0, #7aa6ff 60%, #5f7cff)
       </div>
 
       <div class="am-bottom-icons">
-        <span class="emoji">💬</span>
-        <span class="emoji">📻</span>
+        <span class="emoji" id="btnLyrics" style="cursor: pointer;">💬</span>
+        <span class="emoji" id="btnRadio" style="cursor: pointer;">📻</span>
         <span class="emoji" id="btnQueueIcon" style="cursor: pointer;">≣</span>
       </div>
       <div class="am-device-text">DJ Marella's Playlist</div>
@@ -455,6 +455,11 @@ const btnQueueHeader = document.getElementById('btnQueueHeader');
 const btnQueueIcon = document.getElementById('btnQueueIcon');
 const queueChevron = document.getElementById('queueChevron');
 const overlay = document.getElementById('intro-overlay');
+const btnStar = document.getElementById('btnStar');
+const btnMore = document.getElementById('btnMore');
+const amScrubber = document.getElementById('amScrubber');
+const btnLyrics = document.getElementById('btnLyrics');
+const btnRadio = document.getElementById('btnRadio');
 
 function initPlayer() {
   loadTrack(currentTrack);
@@ -556,7 +561,29 @@ function prevTrack() {
 btnPlayPause.addEventListener('click', togglePlay);
 btnNext.addEventListener('click', nextTrack);
 btnPrev.addEventListener('click', prevTrack);
+btnStar.addEventListener('click', () => {
+  const starSpan = btnStar.querySelector('.emoji');
+  if (starSpan.innerText === '☆') {
+    starSpan.innerText = '★';
+    starSpan.style.color = '#ff8fc0'; 
+  } else {
+    starSpan.innerText = '☆';
+    starSpan.style.color = '#fff';
+  }
+});
 
+amScrubber.addEventListener('click', (e) => {
+  if (audio.duration && !isNaN(audio.duration)) {
+    const rect = amScrubber.getBoundingClientRect();
+    const percent = (e.clientX - rect.left) / rect.width;
+    audio.currentTime = percent * audio.duration;
+  }
+});
+
+const comingSoonAlert = () => alert("Marella says you should be dancing, not playing with the app! 💃✨");
+btnMore.addEventListener('click', comingSoonAlert);
+btnLyrics.addEventListener('click', comingSoonAlert);
+btnRadio.addEventListener('click', comingSoonAlert);
 island.addEventListener('click', (e) => {
   e.stopPropagation(); togglePlay();
 });

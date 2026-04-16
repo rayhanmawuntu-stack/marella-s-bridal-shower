@@ -1,769 +1,1534 @@
 <!DOCTYPE html>
+
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>Bridal Shower 🎀</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-<style>
-* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  <head>
+    <meta charset="UTF-8" />
 
-html, body { 
-  margin: 0; height: 100%; 
-  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Apple Color Emoji", "Segoe UI Emoji", sans-serif; 
-  overscroll-behavior-y: none; user-select: none; -webkit-user-select: none;
-}
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover"
+    />
 
-body { background: radial-gradient(circle at top, #ff8fc0, #7aa6ff 60%, #5f7cff); }
+    <meta name="apple-mobile-web-app-capable" content="yes" />
 
-.phone { width: 100%; max-width: 420px; margin: auto; height: 100dvh; position: relative; overflow: hidden; display: flex; flex-direction: column; }
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
 
-.emoji { font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; }
+    <title>Bridal Shower 🎀</title>
 
-/* --- INTRO OVERLAY --- */
-#intro-overlay {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at top, #ff8fc0, #7aa6ff 60%, #5f7cff);
-  z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.6s ease, transform 0.6s ease; cursor: pointer;
-}
-.intro-btn { background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(20px); padding: 18px 36px; border-radius: 40px; color: white; font-size: 18px; font-weight: 600; box-shadow: 0 10px 40px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.4); animation: pulse 2s infinite; }
-@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
 
-/* --- DYNAMIC ISLAND --- */
-.island {
-  position: absolute; top: max(12px, env(safe-area-inset-top)); left: 50%; transform: translateX(-50%); width: 120px; height: 34px;
-  background: #000; border-radius: 17px; color: #fff; display: flex; align-items: center; justify-content: center; z-index: 100;
-  box-shadow: 0 10px 30px rgba(0,0,0,.4); cursor: pointer;
-  transition: width 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), height 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), border-radius 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); overflow: hidden;
-}
-.island:active { transform: translateX(-50%) scale(0.97); }
-.island.playing { width: 290px; height: 64px; border-radius: 32px; }
+    <style>
 
-.island-compact { position: absolute; display: flex; align-items: center; font-size: 13px; white-space: nowrap; transition: opacity 0.2s ease; }
-.island.playing .island-compact { opacity: 0; pointer-events: none; }
+      * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-.island-expanded { position: absolute; width: 100%; height: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; opacity: 0; pointer-events: none; transition: opacity 0.2s ease; }
-.island.playing .island-expanded { opacity: 1; pointer-events: auto; transition: opacity 0.4s ease 0.2s; }
 
-.meta-left { display: flex; align-items: center; gap: 12px; overflow: hidden; }
 
-/* Image Containers - Display set by children */
-.album-art { width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0; background-color: rgba(255,255,255,0.1); overflow: hidden; }
-.am-queue-art { width: 44px; height: 44px; border-radius: 6px; flex-shrink: 0; background-color: rgba(255,255,255,0.1); overflow: hidden; }
+      html, body {
 
-.meta-text { display: flex; flex-direction: column; align-items: flex-start; white-space: nowrap; overflow: hidden;}
-.meta-title { font-size: 13px; font-weight: 600; line-height: 1.2; text-overflow: ellipsis; overflow: hidden; width: 150px;}
-.meta-artist { font-size: 11px; color: #aaa; line-height: 1.2; margin-top: 2px;}
+        margin: 0; height: 100%;
 
-.eq { display: flex; gap: 3px; height: 14px; align-items: flex-end; }
-.eq span { width: 3px; background: #ff8fc0; border-radius: 2px; animation: bounce 0.5s infinite alternate ease-in; }
-.eq span:nth-child(1) { animation-delay: 0.1s; height: 60%; } .eq span:nth-child(2) { animation-delay: 0.3s; height: 100%; } .eq span:nth-child(3) { animation-delay: 0.0s; height: 80%; }
-@keyframes bounce { to { height: 20%; } }
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
 
-/* --- VIEWS LOGIC --- */
-.view { display: none; flex-direction: column; height: 100%; flex: 1; animation: fadeView 0.3s ease-out forwards; }
-.view.active { display: flex; }
-@keyframes fadeView { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        overscroll-behavior-y: none; user-select: none; -webkit-user-select: none;
 
-/* HERO & SHEET */
-.hero { padding: max(80px, calc(env(safe-area-inset-top) + 60px)) 24px 24px; color: #fff; flex-shrink: 0; }
-.hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(48px, 12vw, 56px); margin: 10px 0; }
-.badge { background: rgba(255,255,255,.2); backdrop-filter: blur(10px); padding: 6px 14px; border-radius: 20px; font-size: 12px; display: inline-block; }
-.subtitle { opacity: .9; }
+      }
 
-.sheet {
-  background: rgba(255,255,255,.9); backdrop-filter: blur(30px); border-radius: 32px 32px 0 0;
-  padding: 20px; margin-top: 10px; box-shadow: 0 -10px 40px rgba(0,0,0,.15), inset 0 1px 0 rgba(255,255,255,.6);
-  flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: calc(110px + env(safe-area-inset-bottom));
-}
 
-/* UI COMPONENTS */
-.card { background: rgba(255,255,255,.9); border-radius: 22px; padding: 16px; margin-bottom: 14px; display: flex; gap: 14px; align-items: center; box-shadow: 0 6px 20px rgba(0,0,0,.08), inset 0 1px 0 rgba(255,255,255,.7); cursor: pointer; }
-.card:active { transform: scale(0.98); }
-.card-column { flex-direction: column; align-items: flex-start; gap: 8px; cursor: default; } .card-column:active { transform: none; }
-.icon { width: 50px; height: 50px; border-radius: 16px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,.1); font-size: 20px; flex-shrink: 0; }
-.date { background: #ffd6e0; } .time { background: #ffe9a8; } .location { background: #d6ffe0; } .dress { background: #e0d6ff; } .gift { background: #ffebd6; } .qris-icon { background: #e0f7fa; } .photo { background: #e6f2ff; }
-.card-title { font-size: 11px; color: #888; letter-spacing: .5px; margin-bottom: 2px; text-transform: uppercase; }
-.card-main { font-weight: 600; }
-.section-title { margin-top: 24px; font-size: 11px; color: #aaa; letter-spacing: 1px; font-weight: 600; text-transform: uppercase; }
-.host-card { background: #faf2f8; border: 1px solid #f6e6f0; border-radius: 22px; padding: 16px; margin-top: 10px; display: flex; gap: 14px; align-items: center; cursor: default; } .host-card:active { transform: none; }
-.avatar-group { display: flex; flex-shrink: 0; }
-.avatar { width: 44px; height: 44px; border-radius: 50%; border: 3px solid #fff; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; font-size: 18px; box-shadow: 0 4px 10px rgba(0,0,0,.05); }
-.avatar:not(:first-child) { margin-left: -14px; } .bg-pink { background: #ff76ac; } .bg-blue { background: #5abafc; } .bg-yellow { background: #ffca58; }
-.rsvp-card { background: #351f44; border-radius: 22px; padding: 16px; margin-top: 14px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 8px 20px rgba(53,31,68,.3); cursor: pointer; transition: transform 0.2s; } .rsvp-card:active { transform: scale(0.97); }
-.rsvp-icon { width: 50px; height: 50px; border-radius: 16px; background: linear-gradient(135deg, #ff6b9e, #c660f9); display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 10px rgba(0,0,0,.15); flex-shrink: 0; }
-.chevron { color: #837292; font-size: 20px; padding-left: 8px; }
-.input-field { width: 100%; padding: 14px; border-radius: 14px; border: 1px solid #eee; background: #f9f9f9; margin-bottom: 10px; font-family: inherit; font-size: 14px; }
-.btn-primary { width: 100%; padding: 16px; border-radius: 16px; background: linear-gradient(135deg, #ff6b9e, #c660f9); color: white; font-weight: 600; border: none; font-size: 14px; cursor: pointer; box-shadow: 0 4px 15px rgba(255, 107, 158, 0.4); margin-top: 10px; transition: 0.2s; }
-.btn-primary:active { transform: scale(0.97); } .btn-primary:disabled { opacity: 0.7; pointer-events: none; }
 
-/* --- IOS 26 WIDGET COUNTDOWN --- */
-.count-widget {
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-radius: 24px;
-  padding: 20px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.8);
-  margin-bottom: 14px;
-}
-.count-row { display: flex; justify-content: center; align-items: center; margin-top: 14px; gap: 4px; }
-.count-box { flex: 1; text-align: center; display: flex; flex-direction: column; align-items: center; }
-.count-num { 
-  font-size: clamp(24px, 8vw, 32px); font-weight: 700; color: #1c1c1e; 
-  font-variant-numeric: tabular-nums; line-height: 1; margin-bottom: 6px; 
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; 
-}
-.count-label { font-size: 10px; font-weight: 600; color: #8e8e93; text-transform: uppercase; letter-spacing: 0.5px; }
-.count-colon { font-size: 20px; font-weight: 600; color: #c7c7cc; margin: 0 2px; padding-bottom: 14px; }
+      body { background: radial-gradient(circle at top, #ff8fc0, #7aa6ff 60%, #5f7cff); }
 
-/* QRIS MODAL */
-.modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); z-index: 9998; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: 0.3s ease; }
-.modal.show { opacity: 1; pointer-events: auto; }
-.modal-content { background: #fff; width: 85%; max-width: 360px; border-radius: 28px; padding: 24px; text-align: center; position: relative; transform: scale(0.9); transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 20px 40px rgba(0,0,0,0.2), 0 0 0 4px rgba(198, 96, 249, 0.3); }
-.modal.show .modal-content { transform: scale(1); }
-.close-btn { position: absolute; top: 16px; right: 16px; color: #666; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 4px; }
-.modal-img { width: 100%; border-radius: 12px; margin-top: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 
-/* --- APPLE MUSIC PLAYER UI STYLES --- */
-#view-4 .sheet { 
-  border-radius: 0; margin-top: 0; background: linear-gradient(to bottom, #4a1f33, #2b111c);
-  color: #fff; padding: max(60px, calc(env(safe-area-inset-top) + 40px)) 30px 140px; box-shadow: none;
-}
-.am-drag-handle { width: 36px; height: 5px; background: rgba(255,255,255,0.3); border-radius: 3px; margin: 0 auto 30px; }
 
-/* Main Player Art Container */
-.am-art-container { width: 100%; aspect-ratio: 1; border-radius: 12px; background-color: rgba(255,255,255,0.1); box-shadow: 0 20px 50px rgba(0,0,0,0.4); transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); margin-bottom: 40px; overflow: hidden;}
-.am-art-container.paused { transform: scale(0.82); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+      .phone { width: 100%; max-width: 420px; margin: auto; height: 100dvh; position: relative; overflow: hidden; display: flex; flex-direction: column; }
 
-/* Injected image styling */
-.cover-img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; border-radius: inherit; }
 
-.am-info-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-.am-text-left { display: flex; flex-direction: column; overflow: hidden; }
-.am-title { font-size: 22px; font-weight: 700; color: #fff; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; letter-spacing: -0.5px; }
-.am-artist { font-size: 18px; color: rgba(255,255,255,0.7); font-weight: 400; margin-top: 2px;}
-.am-action-right { display: flex; gap: 16px; align-items: center; }
-.am-icon-btn { background: rgba(255,255,255,0.15); border: none; border-radius: 50%; width: 28px; height: 28px; color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; font-size: 14px;}
-.am-icon-btn-plain { background: none; border: none; color: rgba(255,255,255,0.8); font-size: 22px; cursor: pointer; padding: 0;}
 
-.am-scrubber-container { margin-bottom: 40px; }
-.am-progress { width: 100%; height: 5px; background: rgba(255,255,255,0.2); border-radius: 3px; position: relative; overflow: hidden; }
-.am-progress-fill { position: absolute; top: 0; left: 0; height: 100%; width: 0%; background: rgba(255,255,255,0.9); border-radius: 3px; transition: width 0.1s linear; }
-.am-times { display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: rgba(255,255,255,0.5); font-weight: 600; margin-top: 8px;}
+      .emoji { font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; }
 
-.am-controls { display: flex; align-items: center; justify-content: center; gap: 50px; margin-bottom: 40px;}
-.am-btn { background: none; border: none; font-size: 38px; color: #fff; cursor: pointer; transition: 0.2s; padding: 0;}
-.am-btn:active { transform: scale(0.8); opacity: 0.5; }
-.am-btn-play { font-size: 48px; }
 
-.am-volume { display: flex; align-items: center; gap: 12px; color: rgba(255,255,255,0.5); font-size: 12px; margin-bottom: 30px;}
-.am-vol-bar { flex: 1; height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; overflow: hidden; }
-.am-vol-fill { width: 70%; height: 100%; background: #fff; border-radius: 2px; }
-.am-bottom-icons { display: flex; justify-content: space-between; padding: 0 20px; color: rgba(255,255,255,0.6); font-size: 18px; margin-bottom: 12px;}
-.am-device-text { text-align: center; font-size: 10px; color: rgba(255,255,255,0.5); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;}
 
-.am-queue-header { display: flex; justify-content: space-between; align-items: center; margin-top: 40px; margin-bottom: 14px; cursor: pointer; padding: 10px 0; }
-.am-queue-title { font-size: 18px; font-weight: 700; color: #fff; margin: 0;}
-.am-queue-list { display: flex; flex-direction: column; gap: 10px; max-height: 1500px; opacity: 1; transition: all 0.4s ease; overflow: hidden; }
-.am-queue-list.collapsed { max-height: 0; opacity: 0; margin: 0; }
-.am-queue-item { display: flex; align-items: center; gap: 14px; padding: 10px; border-radius: 12px; transition: 0.2s; cursor: pointer; background: rgba(255,255,255,0.05);}
-.am-queue-item:active { transform: scale(0.98); }
-.am-queue-item.active { background: rgba(255,255,255,0.15); }
+      /* --- INTRO OVERLAY --- */
 
-.am-queue-text { flex: 1; display: flex; flex-direction: column; }
-.am-queue-title-text { font-size: 14px; font-weight: 600; color: #fff; }
-.am-queue-artist-text { font-size: 12px; color: rgba(255,255,255,0.6); }
+      #intro-overlay {
 
-/* NAV */
-.nav { position: absolute; bottom: max(14px, env(safe-area-inset-bottom)); width: 100%; display: flex; justify-content: center; z-index: 20; }
-.pill { width: 92%; height: 74px; background: rgba(255,255,255,.85); backdrop-filter: blur(40px); border-radius: 40px; display: flex; align-items: center; justify-content: space-around; box-shadow: 0 12px 30px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.6); }
-.item { font-size: 10px; text-align: center; opacity: .5; transition: .2s; cursor: pointer; padding: 10px; flex: 1; color: #2b1b3d;}
-.item .emoji { font-size: 22px; display: inline-block; margin-bottom: 4px; }
-.item.active { opacity: 1; font-weight: 600; transform: translateY(-2px); }
-</style>
-</head>
-<body>
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at top, #ff8fc0, #7aa6ff 60%, #5f7cff);
 
-<div id="intro-overlay">
-  <div class="intro-btn">Tap to Open <span class="emoji">💌</span></div>
-</div>
+        z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.6s ease, transform 0.6s ease; cursor: pointer;
 
-<div class="phone">
+      }
 
-  <div class="island" id="audioToggle">
-    <div class="island-compact">
-      <span class="emoji compact-icon" style="margin-right:6px">🎵</span>
-      <span class="compact-text">Play Music</span>
+      .intro-btn { background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(20px); padding: 18px 36px; border-radius: 40px; color: white; font-size: 18px; font-weight: 600; box-shadow: 0 10px 40px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.4); animation: pulse 2s infinite; }
+
+      @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+
+
+      /* --- DYNAMIC ISLAND --- */
+
+      .island {
+
+        position: absolute; top: max(12px, env(safe-area-inset-top)); left: 50%; transform: translateX(-50%); width: 120px; height: 34px;
+
+        background: #000; border-radius: 17px; color: #fff; display: flex; align-items: center; justify-content: center; z-index: 100;
+
+        box-shadow: 0 10px 30px rgba(0,0,0,.4); cursor: pointer;
+
+        transition: width 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), height 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), border-radius 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); overflow: hidden;
+
+      }
+
+      .island:active { transform: translateX(-50%) scale(0.97); }
+
+      .island.playing { width: 290px; height: 64px; border-radius: 32px; }
+
+
+
+      .island-compact { position: absolute; display: flex; align-items: center; font-size: 13px; white-space: nowrap; transition: opacity 0.2s ease; }
+
+      .island.playing .island-compact { opacity: 0; pointer-events: none; }
+
+
+
+      .island-expanded { position: absolute; width: 100%; height: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; opacity: 0; pointer-events: none; transition: opacity 0.2s ease; }
+
+      .island.playing .island-expanded { opacity: 1; pointer-events: auto; transition: opacity 0.4s ease 0.2s; }
+
+
+
+      .meta-left { display: flex; align-items: center; gap: 12px; overflow: hidden; }
+
+
+
+      /* Image Containers - Display set by children */
+
+      .album-art { width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0; background-color: rgba(255,255,255,0.1); overflow: hidden; }
+
+      .am-queue-art { width: 44px; height: 44px; border-radius: 6px; flex-shrink: 0; background-color: rgba(255,255,255,0.1); overflow: hidden; }
+
+
+
+      .meta-text { display: flex; flex-direction: column; align-items: flex-start; white-space: nowrap; overflow: hidden;}
+
+      .meta-title { font-size: 13px; font-weight: 600; line-height: 1.2; text-overflow: ellipsis; overflow: hidden; width: 150px;}
+
+      .meta-artist { font-size: 11px; color: #aaa; line-height: 1.2; margin-top: 2px;}
+
+
+
+      .eq { display: flex; gap: 3px; height: 14px; align-items: flex-end; }
+
+      .eq span { width: 3px; background: #ff8fc0; border-radius: 2px; animation: bounce 0.5s infinite alternate ease-in; }
+
+      .eq span:nth-child(1) { animation-delay: 0.1s; height: 60%; } .eq span:nth-child(2) { animation-delay: 0.3s; height: 100%; } .eq span:nth-child(3) { animation-delay: 0.0s; height: 80%; }
+
+      @keyframes bounce { to { height: 20%; } }
+
+
+
+      /* --- VIEWS LOGIC --- */
+
+      .view { display: none; flex-direction: column; height: 100%; flex: 1; animation: fadeView 0.3s ease-out forwards; }
+
+      .view.active { display: flex; }
+
+      @keyframes fadeView { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+
+
+      /* HERO & SHEET */
+
+      .hero { padding: max(80px, calc(env(safe-area-inset-top) + 60px)) 24px 24px; color: #fff; flex-shrink: 0; }
+
+      .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(48px, 12vw, 56px); margin: 10px 0; }
+
+      .badge { background: rgba(255,255,255,.2); backdrop-filter: blur(10px); padding: 6px 14px; border-radius: 20px; font-size: 12px; display: inline-block; }
+
+      .subtitle { opacity: .9; }
+
+
+
+      .sheet {
+
+        background: rgba(255,255,255,.9); backdrop-filter: blur(30px); border-radius: 32px 32px 0 0;
+
+        padding: 20px; margin-top: 10px; box-shadow: 0 -10px 40px rgba(0,0,0,.15), inset 0 1px 0 rgba(255,255,255,.6);
+
+        flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: calc(110px + env(safe-area-inset-bottom));
+
+      }
+
+
+
+      /* UI COMPONENTS */
+
+      .card { background: rgba(255,255,255,.9); border-radius: 22px; padding: 16px; margin-bottom: 14px; display: flex; gap: 14px; align-items: center; box-shadow: 0 6px 20px rgba(0,0,0,.08), inset 0 1px 0 rgba(255,255,255,.7); cursor: pointer; }
+
+      .card:active { transform: scale(0.98); }
+
+      .card-column { flex-direction: column; align-items: flex-start; gap: 8px; cursor: default; } .card-column:active { transform: none; }
+
+      .icon { width: 50px; height: 50px; border-radius: 16px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,.1); font-size: 20px; flex-shrink: 0; }
+
+      .date { background: #ffd6e0; } .time { background: #ffe9a8; } .location { background: #d6ffe0; } .dress { background: #e0d6ff; } .gift { background: #ffebd6; } .qris-icon { background: #e0f7fa; } .photo { background: #e6f2ff; }
+
+      .card-title { font-size: 11px; color: #888; letter-spacing: .5px; margin-bottom: 2px; text-transform: uppercase; }
+
+      .card-main { font-weight: 600; }
+
+      .section-title { margin-top: 24px; font-size: 11px; color: #aaa; letter-spacing: 1px; font-weight: 600; text-transform: uppercase; }
+
+      .host-card { background: #faf2f8; border: 1px solid #f6e6f0; border-radius: 22px; padding: 16px; margin-top: 10px; display: flex; gap: 14px; align-items: center; cursor: default; } .host-card:active { transform: none; }
+
+      .avatar-group { display: flex; flex-shrink: 0; }
+
+      .avatar { width: 44px; height: 44px; border-radius: 50%; border: 3px solid #fff; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; font-size: 18px; box-shadow: 0 4px 10px rgba(0,0,0,.05); }
+
+      .avatar:not(:first-child) { margin-left: -14px; } .bg-pink { background: #ff76ac; } .bg-blue { background: #5abafc; } .bg-yellow { background: #ffca58; }
+
+      .rsvp-card { background: #351f44; border-radius: 22px; padding: 16px; margin-top: 14px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 8px 20px rgba(53,31,68,.3); cursor: pointer; transition: transform 0.2s; } .rsvp-card:active { transform: scale(0.97); }
+
+      .rsvp-icon { width: 50px; height: 50px; border-radius: 16px; background: linear-gradient(135deg, #ff6b9e, #c660f9); display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 10px rgba(0,0,0,.15); flex-shrink: 0; }
+
+      .chevron { color: #837292; font-size: 20px; padding-left: 8px; }
+
+      .input-field { width: 100%; padding: 14px; border-radius: 14px; border: 1px solid #eee; background: #f9f9f9; margin-bottom: 10px; font-family: inherit; font-size: 14px; }
+
+      .btn-primary { width: 100%; padding: 16px; border-radius: 16px; background: linear-gradient(135deg, #ff6b9e, #c660f9); color: white; font-weight: 600; border: none; font-size: 14px; cursor: pointer; box-shadow: 0 4px 15px rgba(255, 107, 158, 0.4); margin-top: 10px; transition: 0.2s; }
+
+      .btn-primary:active { transform: scale(0.97); } .btn-primary:disabled { opacity: 0.7; pointer-events: none; }
+
+
+
+      /* --- IOS 26 WIDGET COUNTDOWN --- */
+
+      .count-widget {
+
+        background: rgba(255, 255, 255, 0.75);
+
+        backdrop-filter: blur(20px);
+
+        -webkit-backdrop-filter: blur(20px);
+
+        border-radius: 24px;
+
+        padding: 20px;
+
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+
+        margin-bottom: 14px;
+
+      }
+
+      .count-row { display: flex; justify-content: center; align-items: center; margin-top: 14px; gap: 4px; }
+
+      .count-box { flex: 1; text-align: center; display: flex; flex-direction: column; align-items: center; }
+
+      .count-num {
+
+        font-size: clamp(24px, 8vw, 32px); font-weight: 700; color: #1c1c1e;
+
+        font-variant-numeric: tabular-nums; line-height: 1; margin-bottom: 6px;
+
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+
+      }
+
+      .count-label { font-size: 10px; font-weight: 600; color: #8e8e93; text-transform: uppercase; letter-spacing: 0.5px; }
+
+      .count-colon { font-size: 20px; font-weight: 600; color: #c7c7cc; margin: 0 2px; padding-bottom: 14px; }
+
+
+
+      /* QRIS MODAL */
+
+      .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); z-index: 9998; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: 0.3s ease; }
+
+      .modal.show { opacity: 1; pointer-events: auto; }
+
+      .modal-content { background: #fff; width: 85%; max-width: 360px; border-radius: 28px; padding: 24px; text-align: center; position: relative; transform: scale(0.9); transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 20px 40px rgba(0,0,0,0.2), 0 0 0 4px rgba(198, 96, 249, 0.3); }
+
+      .modal.show .modal-content { transform: scale(1); }
+
+      .close-btn { position: absolute; top: 16px; right: 16px; color: #666; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 4px; }
+
+      .modal-img { width: 100%; border-radius: 12px; margin-top: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+
+
+
+      /* --- APPLE MUSIC PLAYER UI STYLES --- */
+
+      #view-4 .sheet {
+
+        border-radius: 0; margin-top: 0; background: linear-gradient(to bottom, #4a1f33, #2b111c);
+
+        color: #fff; padding: max(60px, calc(env(safe-area-inset-top) + 40px)) 30px 140px; box-shadow: none;
+
+      }
+
+      .am-drag-handle { width: 36px; height: 5px; background: rgba(255,255,255,0.3); border-radius: 3px; margin: 0 auto 30px; }
+
+
+
+      /* Main Player Art Container */
+
+      .am-art-container { width: 100%; aspect-ratio: 1; border-radius: 12px; background-color: rgba(255,255,255,0.1); box-shadow: 0 20px 50px rgba(0,0,0,0.4); transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); margin-bottom: 40px; overflow: hidden;}
+
+      .am-art-container.paused { transform: scale(0.82); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+
+
+
+      /* Injected image styling */
+
+      .cover-img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; border-radius: inherit; }
+
+
+
+      .am-info-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+
+      .am-text-left { display: flex; flex-direction: column; overflow: hidden; }
+
+      .am-title { font-size: 22px; font-weight: 700; color: #fff; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; letter-spacing: -0.5px; }
+
+      .am-artist { font-size: 18px; color: rgba(255,255,255,0.7); font-weight: 400; margin-top: 2px;}
+
+      .am-action-right { display: flex; gap: 16px; align-items: center; }
+
+      .am-icon-btn { background: rgba(255,255,255,0.15); border: none; border-radius: 50%; width: 28px; height: 28px; color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; font-size: 14px;}
+
+      .am-icon-btn-plain { background: none; border: none; color: rgba(255,255,255,0.8); font-size: 22px; cursor: pointer; padding: 0;}
+
+
+
+      .am-scrubber-container { margin-bottom: 40px; }
+
+      .am-progress { width: 100%; height: 5px; background: rgba(255,255,255,0.2); border-radius: 3px; position: relative; overflow: hidden; }
+
+      .am-progress-fill { position: absolute; top: 0; left: 0; height: 100%; width: 0%; background: rgba(255,255,255,0.9); border-radius: 3px; transition: width 0.1s linear; }
+
+      .am-times { display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: rgba(255,255,255,0.5); font-weight: 600; margin-top: 8px;}
+
+
+
+      .am-controls { display: flex; align-items: center; justify-content: center; gap: 50px; margin-bottom: 40px;}
+
+      .am-btn { background: none; border: none; font-size: 38px; color: #fff; cursor: pointer; transition: 0.2s; padding: 0;}
+
+      .am-btn:active { transform: scale(0.8); opacity: 0.5; }
+
+      .am-btn-play { font-size: 48px; }
+
+
+
+      .am-volume { display: flex; align-items: center; gap: 12px; color: rgba(255,255,255,0.5); font-size: 12px; margin-bottom: 30px;}
+
+      .am-vol-bar { flex: 1; height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; overflow: hidden; }
+
+      .am-vol-fill { width: 70%; height: 100%; background: #fff; border-radius: 2px; }
+
+      .am-bottom-icons { display: flex; justify-content: space-between; padding: 0 20px; color: rgba(255,255,255,0.6); font-size: 18px; margin-bottom: 12px;}
+
+      .am-device-text { text-align: center; font-size: 10px; color: rgba(255,255,255,0.5); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;}
+
+
+
+      .am-queue-header { display: flex; justify-content: space-between; align-items: center; margin-top: 40px; margin-bottom: 14px; cursor: pointer; padding: 10px 0; }
+
+      .am-queue-title { font-size: 18px; font-weight: 700; color: #fff; margin: 0;}
+
+      .am-queue-list { display: flex; flex-direction: column; gap: 10px; max-height: 1500px; opacity: 1; transition: all 0.4s ease; overflow: hidden; }
+
+      .am-queue-list.collapsed { max-height: 0; opacity: 0; margin: 0; }
+
+      .am-queue-item { display: flex; align-items: center; gap: 14px; padding: 10px; border-radius: 12px; transition: 0.2s; cursor: pointer; background: rgba(255,255,255,0.05);}
+
+      .am-queue-item:active { transform: scale(0.98); }
+
+      .am-queue-item.active { background: rgba(255,255,255,0.15); }
+
+
+
+      .am-queue-text { flex: 1; display: flex; flex-direction: column; }
+
+      .am-queue-title-text { font-size: 14px; font-weight: 600; color: #fff; }
+
+      .am-queue-artist-text { font-size: 12px; color: rgba(255,255,255,0.6); }
+
+
+
+      /* NAV */
+
+      .nav { position: absolute; bottom: max(14px, env(safe-area-inset-bottom)); width: 100%; display: flex; justify-content: center; z-index: 20; }
+
+      .pill { width: 92%; height: 74px; background: rgba(255,255,255,.85); backdrop-filter: blur(40px); border-radius: 40px; display: flex; align-items: center; justify-content: space-around; box-shadow: 0 12px 30px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.6); }
+
+      .item { font-size: 10px; text-align: center; opacity: .5; transition: .2s; cursor: pointer; padding: 10px; flex: 1; color: #2b1b3d;}
+
+      .item .emoji { font-size: 22px; display: inline-block; margin-bottom: 4px; }
+
+      .item.active { opacity: 1; font-weight: 600; transform: translateY(-2px); }
+    </style>
+  </head>
+
+  <body>
+    <div id="intro-overlay">
+      <div class="intro-btn">Tap to Open <span class="emoji">💌</span></div>
     </div>
-    <div class="island-expanded">
-      <div class="meta-left">
-        <div class="album-art" id="islandArt"></div>
-        <div class="meta-text">
-          <span class="meta-title" id="islandTitle">They Wanna F**k</span>
-          <span class="meta-artist" id="islandArtist">Kim Petras</span>
+
+    <div class="phone">
+      <div class="island" id="audioToggle">
+        <div class="island-compact">
+          <span class="emoji compact-icon" style="margin-right:6px">🎵</span>
+
+          <span class="compact-text">Play Music</span>
+        </div>
+
+        <div class="island-expanded">
+          <div class="meta-left">
+            <div class="album-art" id="islandArt"></div>
+
+            <div class="meta-text">
+              <span class="meta-title" id="islandTitle">They Wanna F**k</span>
+
+              <span class="meta-artist" id="islandArtist">Kim Petras</span>
+            </div>
+          </div>
+
+          <div class="eq"><span></span><span></span><span></span></div>
         </div>
       </div>
-      <div class="eq"><span></span><span></span><span></span></div>
-    </div>
-  </div>
 
-  <div class="view active" id="view-0">
-    <div class="hero">
-      <div class="badge"><span class="emoji">💛</span> BRIDAL SHOWER</div>
-      <h1 style="margin-top: 10px;">Marella</h1>
-      <div class="subtitle">— the bride-to-be <span class="emoji">💍</span> —</div>
-    </div>
-    <div class="sheet">
-      <div class="card" style="cursor: default;">
-        <div class="icon date"><span class="emoji">📅</span></div>
-        <div><div class="card-title">DATE</div><div class="card-main">Sunday, April 19th 2026</div></div>
-      </div>
-      <div class="card" style="cursor: default;">
-        <div class="icon time"><span class="emoji">⏰</span></div>
-        <div><div class="card-title">TIME</div><div class="card-main">12:00 PM</div></div>
-      </div>
-      
-      <div class="count-widget">
-        <div class="card-title"><span class="emoji">⏳</span> COUNTDOWN</div>
-        <div class="count-row">
-          <div class="count-box"><div class="count-num" id="d">00</div><div class="count-label">Days</div></div>
-          <div class="count-colon">:</div>
-          <div class="count-box"><div class="count-num" id="h">00</div><div class="count-label">Hrs</div></div>
-          <div class="count-colon">:</div>
-          <div class="count-box"><div class="count-num" id="m">00</div><div class="count-label">Min</div></div>
-          <div class="count-colon">:</div>
-          <div class="count-box"><div class="count-num" id="s">00</div><div class="count-label">Sec</div></div>
+      <div class="view active" id="view-0">
+        <div class="hero">
+          <div class="badge"><span class="emoji">💛</span> BRIDAL SHOWER</div>
+
+          <h1 style="margin-top: 10px;">Marella</h1>
+
+          <div class="subtitle">
+            — the bride-to-be <span class="emoji">💍</span> —
+          </div>
+        </div>
+
+        <div class="sheet">
+          <div class="card" style="cursor: default;">
+            <div class="icon date"><span class="emoji">📅</span></div>
+
+            <div>
+              <div class="card-title">DATE</div>
+              <div class="card-main">Sunday, April 19th 2026</div>
+            </div>
+          </div>
+
+          <div class="card" style="cursor: default;">
+            <div class="icon time"><span class="emoji">⏰</span></div>
+
+            <div>
+              <div class="card-title">TIME</div>
+              <div class="card-main">12:00 PM</div>
+            </div>
+          </div>
+
+          <div class="count-widget">
+            <div class="card-title">
+              <span class="emoji">⏳</span> COUNTDOWN
+            </div>
+
+            <div class="count-row">
+              <div class="count-box">
+                <div class="count-num" id="d">00</div>
+                <div class="count-label">Days</div>
+              </div>
+
+              <div class="count-colon">:</div>
+
+              <div class="count-box">
+                <div class="count-num" id="h">00</div>
+                <div class="count-label">Hrs</div>
+              </div>
+
+              <div class="count-colon">:</div>
+
+              <div class="count-box">
+                <div class="count-num" id="m">00</div>
+                <div class="count-label">Min</div>
+              </div>
+
+              <div class="count-colon">:</div>
+
+              <div class="count-box">
+                <div class="count-num" id="s">00</div>
+                <div class="count-label">Sec</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-title">Hosted with love by</div>
+
+          <div class="host-card">
+            <div class="avatar-group">
+              <div class="avatar bg-pink">R</div>
+              <div class="avatar bg-blue">D</div>
+              <div class="avatar bg-yellow">T</div>
+            </div>
+
+            <div>
+              <div class="card-title">YOUR HOSTS</div>
+              <div class="card-main" style="color: #2b1b3d;">
+                Rayhan, Denisa & Thalita
+              </div>
+            </div>
+          </div>
+
+          <div class="rsvp-card" id="homeRsvpBtn">
+            <div style="display:flex; gap:14px; align-items:center;">
+              <div class="rsvp-icon"><span class="emoji">💌</span></div>
+
+              <div>
+                <div class="card-title" style="color: #a48bb5;">RSVP</div>
+                <div class="card-main" style="color: #fff;">
+                  Click here to RSVP!
+                </div>
+              </div>
+            </div>
+
+            <div class="chevron">›</div>
+          </div>
         </div>
       </div>
 
-      <div class="section-title">Hosted with love by</div>
-      <div class="host-card">
-        <div class="avatar-group"><div class="avatar bg-pink">R</div><div class="avatar bg-blue">D</div><div class="avatar bg-yellow">T</div></div>
-        <div><div class="card-title">YOUR HOSTS</div><div class="card-main" style="color: #2b1b3d;">Rayhan, Denisa & Thalita</div></div>
-      </div>
-      <div class="rsvp-card" id="homeRsvpBtn">
-        <div style="display:flex; gap:14px; align-items:center;">
-          <div class="rsvp-icon"><span class="emoji">💌</span></div>
-          <div><div class="card-title" style="color: #a48bb5;">RSVP</div><div class="card-main" style="color: #fff;">Click here to RSVP!</div></div>
-        </div>
-        <div class="chevron">›</div>
-      </div>
-    </div>
-  </div>
+      <div class="view" id="view-1">
+        <div class="hero">
+          <div class="badge"><span class="emoji">🎉</span> THE EVENT</div>
 
-  <div class="view" id="view-1">
-    <div class="hero">
-      <div class="badge"><span class="emoji">🎉</span> THE EVENT</div>
-      <h1 style="margin-top: 10px; font-size: 42px;">Celebrate</h1>
-      <div class="subtitle">Food, drinks, and good company</div>
-    </div>
-    <div class="sheet">
-      <div class="card" style="cursor: default;">
-        <div class="icon location"><span class="emoji">📍</span></div>
-        <div><div class="card-title">LOCATION</div><div class="card-main">To be disclosed <span class="emoji">😉</span></div></div>
-      </div>
-      <div class="card" style="cursor: default;">
-        <div class="icon dress"><span class="emoji">👗</span></div>
-        <div><div class="card-title">DRESS CODE</div><div class="card-main">To be announced <span class="emoji">⏳</span></div></div>
-      </div>
-      
-      <div class="card" onclick="window.open('https://www.icloud.com/sharedalbum/#B2EGI9HKKPhidT8', '_blank')">
-        <div class="icon photo"><span class="emoji">📸</span></div>
-        <div style="flex:1;">
-          <div class="card-title">MEMORIES</div>
-          <div class="card-main">Shared Album</div>
-          <div style="font-size: 11px; color: #888; margin-top: 2px;">Tap to view or upload photos!</div>
-        </div>
-        <div class="chevron">›</div>
-      </div>
+          <h1 style="margin-top: 10px; font-size: 42px;">Celebrate</h1>
 
-    </div>
-  </div>
-
-  <div class="view" id="view-2">
-    <div class="hero">
-      <div class="badge"><span class="emoji">💌</span> YOU'RE INVITED</div>
-      <h1 style="margin-top: 10px; font-size: 42px;">RSVP</h1>
-      <div class="subtitle">Please respond by Friday, April 17th</div>
-    </div>
-    <div class="sheet">
-      <div class="card card-column">
-        <div class="card-title" style="margin-top: 5px;">GUEST INFORMATION</div>
-        <input type="text" id="rsvpName" class="input-field" placeholder="First & Last Name">
-        <input type="email" id="rsvpEmail" class="input-field" placeholder="Email Address">
-      </div>
-      <div class="card card-column">
-        <div class="card-title" style="margin-top: 5px;">CAN YOU MAKE IT?</div>
-        <div id="rsvpMessage" style="font-size: 13px; font-weight: 600; color: #2b1b3d; text-align: center; width: 100%; display: none; padding: 10px 0;"></div>
-        <button id="btnYes" class="btn-primary" style="background: #2b1b3d;">Yes, I wouldn't miss it! 🥂</button>
-        <button id="btnNo" class="btn-primary" style="background: #f1f1f1; color: #888; box-shadow: none;">No, I can't make it 😔</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="view" id="view-3">
-    <div class="hero">
-      <div class="badge"><span class="emoji">🎁</span> WISHLIST</div>
-      <h1 style="margin-top: 10px; font-size: 42px;">Gifts</h1>
-      <div class="subtitle">Your presence is enough!</div>
-    </div>
-    <div class="sheet">
-      <div style="text-align: center; padding: 20px 10px; color: #666; font-size: 14px;">
-        <span class="emoji" style="font-size: 40px; display: block; margin-bottom: 10px;">🛍️</span>
-        Your presence at the shower is the greatest gift we could ask for! But if you wish to honor Marella with a gift, she has wishlists set up at the following stores:
-      </div>
-      <div class="card"><div class="icon gift"><span class="emoji">🛒</span></div><div style="flex:1;"><div class="card-main">Shopee Wishlist</div></div><div class="chevron">›</div></div>
-      <div class="card"><div class="icon gift"><span class="emoji">📦</span></div><div style="flex:1;"><div class="card-main">TikTok Shop Wishlist</div></div><div class="chevron">›</div></div>
-      <div class="card" id="qrisBtn"><div class="icon qris-icon"><span class="emoji">📱</span></div><div style="flex:1;"><div class="card-main">QRIS Transfer</div><div style="font-size: 11px; color: #888; margin-top: 2px;">Tap to view QR Code</div></div><div class="chevron">›</div></div>
-    </div>
-  </div>
-
-  <div class="view" id="view-4">
-    <div class="sheet">
-      <div class="am-drag-handle"></div>
-      
-      <div class="am-art-container paused" id="amArtContainer">
+          <div class="subtitle">Food, drinks, and good company</div>
         </div>
 
-      <div class="am-info-row">
-        <div class="am-text-left">
-          <div class="am-title" id="amTitle">They Wanna F**k</div>
-          <div class="am-artist" id="amArtist">Kim Petras</div>
-        </div>
-       <div class="am-action-right">
-          <button class="am-icon-btn" id="btnStar"><span class="emoji">☆</span></button>
-          <button class="am-icon-btn-plain" id="btnMore"><span class="emoji">⋯</span></button>
+        <div class="sheet">
+          <div class="card" style="cursor: default;">
+            <div class="icon location"><span class="emoji">📍</span></div>
+
+            <div>
+              <div class="card-title">LOCATION</div>
+              <div class="card-main">
+                To be disclosed <span class="emoji">😉</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="cursor: default;">
+            <div class="icon dress"><span class="emoji">👗</span></div>
+
+            <div>
+              <div class="card-title">DRESS CODE</div>
+              <div class="card-main">
+                To be announced <span class="emoji">⏳</span>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="card"
+            onclick="window.open('https://www.icloud.com/sharedalbum/#B2EGI9HKKPhidT8', '_blank')"
+          >
+            <div class="icon photo"><span class="emoji">📸</span></div>
+
+            <div style="flex:1;">
+              <div class="card-title">MEMORIES</div>
+
+              <div class="card-main">Shared Album</div>
+
+              <div style="font-size: 11px; color: #888; margin-top: 2px;">
+                Tap to view or upload photos!
+              </div>
+            </div>
+
+            <div class="chevron">›</div>
+          </div>
         </div>
       </div>
 
-      <div class="am-scrubber-container" id="amScrubber" style="cursor: pointer;">
-        <div class="am-progress">
-          <div class="am-progress-fill" id="amProgress"></div>
-        </div>
-        <div class="am-times">
-          <span id="timeCurrent">0:00</span>
-          <span id="timeTotal">-0:00</span>
-        </div>
-      </div>
+      <div class="view" id="view-2">
+        <div class="hero">
+          <div class="badge"><span class="emoji">💌</span> YOU'RE INVITED</div>
 
-      <div class="am-controls">
-        <button class="am-btn" id="btnPrev">⏮</button>
-        <button class="am-btn am-btn-play" id="btnPlayPause"><span id="iconPlayPause">▶</span></button>
-        <button class="am-btn" id="btnNext">⏭</button>
-      </div>
+          <h1 style="margin-top: 10px; font-size: 42px;">RSVP</h1>
 
-      <div class="am-volume">
-        <span class="emoji" style="font-size:14px">🔈</span>
-        <div class="am-vol-bar"><div class="am-vol-fill"></div></div>
-        <span class="emoji" style="font-size:18px">🔊</span>
-      </div>
-
-      <div class="am-bottom-icons">
-        <span class="emoji" id="btnLyrics" style="cursor: pointer;">💬</span>
-        <span class="emoji" id="btnRadio" style="cursor: pointer;">📻</span>
-        <span class="emoji" id="btnQueueIcon" style="cursor: pointer;">≣</span>
-      </div>
-      <div class="am-device-text">DJ Marella's Playlist</div>
-
-      <div class="am-queue-header" id="btnQueueHeader">
-        <h3 class="am-queue-title">Up Next</h3>
-        <span id="queueChevron" style="color: rgba(255,255,255,0.5); font-size: 14px;">▼</span>
-      </div>
-      <div class="am-queue-list collapsed" id="queueList">
+          <div class="subtitle">Please respond by Friday, April 17th</div>
         </div>
 
+        <div class="sheet">
+          <div class="card card-column">
+            <div class="card-title" style="margin-top: 5px;">
+              GUEST INFORMATION
+            </div>
+
+            <input
+              type="text"
+              id="rsvpName"
+              class="input-field"
+              placeholder="First & Last Name"
+            />
+
+            <input
+              type="email"
+              id="rsvpEmail"
+              class="input-field"
+              placeholder="Email Address"
+            />
+          </div>
+
+          <div class="card card-column">
+            <div class="card-title" style="margin-top: 5px;">
+              CAN YOU MAKE IT?
+            </div>
+
+            <div
+              id="rsvpMessage"
+              style="font-size: 13px; font-weight: 600; color: #2b1b3d; text-align: center; width: 100%; display: none; padding: 10px 0;"
+            ></div>
+
+            <button
+              id="btnYes"
+              class="btn-primary"
+              style="background: #2b1b3d;"
+            >
+              Yes, I wouldn't miss it! 🥂
+            </button>
+
+            <button
+              id="btnNo"
+              class="btn-primary"
+              style="background: #f1f1f1; color: #888; box-shadow: none;"
+            >
+              No, I can't make it 😔
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="view" id="view-3">
+        <div class="hero">
+          <div class="badge"><span class="emoji">🎁</span> WISHLIST</div>
+
+          <h1 style="margin-top: 10px; font-size: 42px;">Gifts</h1>
+
+          <div class="subtitle">Your presence is enough!</div>
+        </div>
+
+        <div class="sheet">
+          <div
+            style="text-align: center; padding: 20px 10px; color: #666; font-size: 14px;"
+          >
+            <span
+              class="emoji"
+              style="font-size: 40px; display: block; margin-bottom: 10px;"
+              >🛍️</span
+            >
+
+            Your presence at the shower is the greatest gift we could ask for!
+            But if you wish to honor Marella with a gift, she has wishlists set
+            up at the following stores:
+          </div>
+
+          <div class="card">
+            <div class="icon gift"><span class="emoji">🛒</span></div>
+            <div style="flex:1;">
+              <div class="card-main">Shopee Wishlist</div>
+            </div>
+            <div class="chevron">›</div>
+          </div>
+
+          <div class="card">
+            <div class="icon gift"><span class="emoji">📦</span></div>
+            <div style="flex:1;">
+              <div class="card-main">TikTok Shop Wishlist</div>
+            </div>
+            <div class="chevron">›</div>
+          </div>
+
+          <div class="card" id="qrisBtn">
+            <div class="icon qris-icon"><span class="emoji">📱</span></div>
+            <div style="flex:1;">
+              <div class="card-main">QRIS Transfer</div>
+              <div style="font-size: 11px; color: #888; margin-top: 2px;">
+                Tap to view QR Code
+              </div>
+            </div>
+            <div class="chevron">›</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="view" id="view-4">
+        <div class="sheet">
+          <div class="am-drag-handle"></div>
+
+          <div class="am-art-container paused" id="amArtContainer"></div>
+
+          <div class="am-info-row">
+            <div class="am-text-left">
+              <div class="am-title" id="amTitle">They Wanna F**k</div>
+
+              <div class="am-artist" id="amArtist">Kim Petras</div>
+            </div>
+
+            <div class="am-action-right">
+              <button class="am-icon-btn" id="btnStar">
+                <span class="emoji">☆</span>
+              </button>
+
+              <button class="am-icon-btn-plain" id="btnMore">
+                <span class="emoji">⋯</span>
+              </button>
+            </div>
+          </div>
+
+          <div
+            class="am-scrubber-container"
+            id="amScrubber"
+            style="cursor: pointer;"
+          >
+            <div class="am-progress">
+              <div class="am-progress-fill" id="amProgress"></div>
+            </div>
+
+            <div class="am-times">
+              <span id="timeCurrent">0:00</span>
+
+              <span id="timeTotal">-0:00</span>
+            </div>
+          </div>
+
+          <div class="am-controls">
+            <button class="am-btn" id="btnPrev">⏮</button>
+
+            <button class="am-btn am-btn-play" id="btnPlayPause">
+              <span id="iconPlayPause">▶</span>
+            </button>
+
+            <button class="am-btn" id="btnNext">⏭</button>
+          </div>
+
+          <div class="am-volume">
+            <span class="emoji" style="font-size:14px">🔈</span>
+
+            <div class="am-vol-bar"><div class="am-vol-fill"></div></div>
+
+            <span class="emoji" style="font-size:18px">🔊</span>
+          </div>
+
+          <div class="am-bottom-icons">
+            <span class="emoji" id="btnLyrics" style="cursor: pointer;"
+              >💬</span
+            >
+
+            <span class="emoji" id="btnRadio" style="cursor: pointer;">📻</span>
+
+            <span class="emoji" id="btnQueueIcon" style="cursor: pointer;"
+              >≣</span
+            >
+          </div>
+
+          <div class="am-device-text">DJ Marella's Playlist</div>
+
+          <div class="am-queue-header" id="btnQueueHeader">
+            <h3 class="am-queue-title">Up Next</h3>
+
+            <span
+              id="queueChevron"
+              style="color: rgba(255,255,255,0.5); font-size: 14px;"
+              >▼</span
+            >
+          </div>
+
+          <div class="am-queue-list collapsed" id="queueList"></div>
+        </div>
+      </div>
+
+      <div class="nav">
+        <div class="pill">
+          <div class="item active" data-target="0">
+            <span class="emoji">🏠</span><br />Home
+          </div>
+
+          <div class="item" data-target="1">
+            <span class="emoji">🎉</span><br />Event
+          </div>
+
+          <div class="item" data-target="2">
+            <span class="emoji">💌</span><br />RSVP
+          </div>
+
+          <div class="item" data-target="3">
+            <span class="emoji">🎁</span><br />Gifts
+          </div>
+
+          <div class="item" data-target="4">
+            <span class="emoji">🎵</span><br />Music
+          </div>
+        </div>
+      </div>
+
+      <div id="qris-modal" class="modal">
+        <div class="modal-content">
+          <div class="close-btn" id="closeQrisBtn">Close <span>ⓧ</span></div>
+
+          <div
+            class="rsvp-icon"
+            style="margin: 0 auto 12px; width: 44px; height: 44px; font-size: 20px;"
+          >
+            <span class="emoji">💖</span>
+          </div>
+
+          <h2 style="margin: 0 0 6px; font-size: 18px; color: #2b1b3d;">
+            QRIS Transfer
+          </h2>
+
+          <p style="margin: 0; font-size: 12px; color: #666;">
+            Scan or save the QRIS code below to make a contribution.
+          </p>
+
+          <img
+            src="https://file.garden/ad-wGPVIV3ilAD_L/Bridal%20Arell/pic/WhatsApp%20Image%202026-04-15%20at%2014.03.22.jpeg"
+            alt="QRIS Code"
+            class="modal-img"
+          />
+        </div>
+      </div>
     </div>
-  </div>
 
-  <div class="nav">
-    <div class="pill">
-      <div class="item active" data-target="0"><span class="emoji">🏠</span><br>Home</div>
-      <div class="item" data-target="1"><span class="emoji">🎉</span><br>Event</div>
-      <div class="item" data-target="2"><span class="emoji">💌</span><br>RSVP</div>
-      <div class="item" data-target="3"><span class="emoji">🎁</span><br>Gifts</div>
-      <div class="item" data-target="4"><span class="emoji">🎵</span><br>Music</div>
-    </div>
-  </div>
+    <audio id="bgm" preload="auto"></audio>
 
-  <div id="qris-modal" class="modal">
-    <div class="modal-content">
-      <div class="close-btn" id="closeQrisBtn">Close <span>ⓧ</span></div>
-      <div class="rsvp-icon" style="margin: 0 auto 12px; width: 44px; height: 44px; font-size: 20px;"><span class="emoji">💖</span></div>
-      <h2 style="margin: 0 0 6px; font-size: 18px; color: #2b1b3d;">QRIS Transfer</h2>
-      <p style="margin: 0; font-size: 12px; color: #666;">Scan or save the QRIS code below to make a contribution.</p>
-      <img src="https://file.garden/ad-wGPVIV3ilAD_L/Bridal%20Arell/pic/WhatsApp%20Image%202026-04-15%20at%2014.03.22.jpeg" alt="QRIS Code" class="modal-img">
-    </div>
-  </div>
+    <script>
 
-</div>
+      // ==========================================
 
-<audio id="bgm" preload="auto"></audio>
+      // --- MUSIC PLAYER & QUEUE LOGIC ---
 
-<script>
-// ==========================================
-// --- MUSIC PLAYER & QUEUE LOGIC ---
-// ==========================================
-
-const kimPetrasImgURL = "https://i.discogs.com/iDn6Q8F8wVo2bAn88dmxM4xhVPMKiW_gNBp7oBdAOTA/rs:fit/g:sm/q:90/h:520/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTI2NjU3/NzMyLTE2ODA3MDQz/NDYtOTQxMy5qcGVn.jpeg"; 
-const cupcakkeImgURL = "https://cdn-images.dzcdn.net/images/cover/1201b401ce5b34210eb9f61adaf9dd58/1900x1900-000000-80-0-0.jpg"; 
-const coconutsImgURL = "https://upload.wikimedia.org/wikipedia/en/a/a8/Kim_Petras_-_Coconuts.png";
-const BestFriendImgURL = "https://file.garden/ad-wGPVIV3ilAD_L/Bridal%20Arell/pic/IMG_8083.jpeg";
-const ShortandSweetImgURL = "https://file.garden/ad-wGPVIV3ilAD_L/Bridal%20Arell/IMG_8087.jpeg";
-const ArianaImgURL = "https://file.garden/ad-wGPVIV3ilAD_L/Bridal%20Arell/IMG_8086.jpeg";
-
-const playlist = [
-  { title: "Espresso", artist: "Sabrina Carpenter", src: "https://file.garden/ad-wGPVIV3ilAD_L/Bridal%20Arell/Sabrina%20Carpenter%20%E2%80%93%20Espresso.mp3", emoji: "💦", fallbackBg: "linear-gradient(135deg, #ff8fc0, #7aa6ff)", imgUrl: ShortandSweetImgURL },
-  { title: "Please, Please, Please", artist: "Sabrina Carpenter", src: "https://file.garden/ad-wGPVIV3ilAD_L/Bridal%20Arell/Sabrina%20Carpenter%20%E2%80%93%20Please%20Please%20Please.mp3", emoji: "💦", fallbackBg: "linear-gradient(135deg, #ff8fc0, #7aa6ff)", imgUrl: ShortandSweetImgURL },
-  { title: "They Wanna Fuck", artist: "Kim Petras", src: "https://file.garden/ad-wGPVIV3ilAD_L/Bridal%20Arell/Kim%20Petras%20%E2%80%93%20They%20Wanna%20Fuck.mp3", emoji: "💦", fallbackBg: "linear-gradient(135deg, #ff8fc0, #7aa6ff)", imgUrl: kimPetrasImgURL },
-  { title: "34+35", artist: "Ariana Grande", src: "https://file.garden/ad-wGPVIV3ilAD_L/Bridal%20Arell/Ariana%20Grande%20%E2%80%93%2034%2B35.mp3", emoji: "💦", fallbackBg: "linear-gradient(135deg, #ff8fc0, #7aa6ff)", imgUrl: ArianaImgURL },
-  // 👇 IF THIS DOESN'T PLAY, PASTE YOUR NEW AUDIO LINK BELOW 👇
-  { title: "Treat Me Like a Slut", artist: "Kim Petras", src: "https://file.garden/ad-wGPVIV3ilAD_L/Bridal%20Arell/2-Kim-Petras-Treat-Me-Like-A-Slut-MIHVMQ.mp3", emoji: "🔥", fallbackBg: "linear-gradient(135deg, #ff5e62, #ff9966)", imgUrl: kimPetrasImgURL },
-  { title: "Tears", artist: "Sabrina Carpenter", src: "https://file.garden/ad-wGPVIV3ilAD_L/Bridal%20Arell/Sabrina%20Carpenter%20%E2%80%93%20Tears.mp3", emoji: "🎀", fallbackBg: "linear-gradient(135deg, #ff5e62, #ff9966)", imgUrl: BestFriendImgURL },
-  { title: "Juno", artist: "Sabrina Carpenter", src: "https://file.garden/ad-wGPVIV3ilAD_L/Bridal%20Arell/Sabrina%20Carpenter%20%E2%80%93%20Juno.mp3", emoji: "🍰", fallbackBg: "linear-gradient(135deg, #ff5e62, #ff9966)", imgUrl: ShortandSweetImgURL },
-  { title: "Throat Goat", artist: "Kim Petras", src: "https://file.garden/ad-wGPVIV3ilAD_L/Bridal%20Arell/5-Kim-Petras-Throat-Goat-VBLX5B.mp3", emoji: "🍆", fallbackBg: "linear-gradient(135deg, #ff5e62, #ff9966)", imgUrl: kimPetrasImgURL },
-  { title: "Bed Chem", artist: "Sabrina Carpenter", src: "https://file.garden/ad-wGPVIV3ilAD_L/Bridal%20Arell/Sabrina%20Carpenter%20%E2%80%93%20Bed%20Chem.mp3", emoji: "💧", fallbackBg: "linear-gradient(135deg, #ff5e62, #ff9966)", imgUrl: ShortandSweetImgURL },
-  { title: "XXX", artist: "Kim Petras", src: "https://file.garden/ad-wGPVIV3ilAD_L/Bridal%20Arell/3-Kim-Petras-XXX-784R1S.mp3", emoji: "🍌", fallbackBg: "linear-gradient(135deg, #ff5e62, #ff9966)", imgUrl: kimPetrasImgURL },
-  { title: "Coconuts", artist: "Kim Petras", src: "https://file.garden/ad-wGPVIV3ilAD_L/Bridal%20Arell/1-Kim-Petras-Coconuts-7U493T.mp3", emoji: "🥥", fallbackBg: "linear-gradient(135deg, #ff5e62, #ff9966)", imgUrl: coconutsImgURL },
-  { title: "CPR", artist: "CupcakKe", src: "https://file.garden/ad-wGPVIV3ilAD_L/Bridal%20Arell/3-cupcakKe-Cpr-7ADPAT.mp3", emoji: "🏥", fallbackBg: "linear-gradient(135deg, #ff5e62, #ff9966)", imgUrl: cupcakkeImgURL }
-];
-
-for (let i = playlist.length - 1; i > 0; i--) {
-  const j = Math.floor(Math.random() * (i + 1));
-  [playlist[i], playlist[j]] = [playlist[j], playlist[i]];
-}  
-  
-let currentTrack = 0;
-const audio = document.getElementById('bgm');
-
-// Island Elements
-const island = document.getElementById('audioToggle');
-const islandTitle = document.getElementById('islandTitle');
-const islandArtist = document.getElementById('islandArtist');
-const islandArt = document.getElementById('islandArt');
-
-// AM Player Elements
-const amTitle = document.getElementById('amTitle');
-const amArtist = document.getElementById('amArtist');
-const amArtContainer = document.getElementById('amArtContainer');
-const btnPlayPause = document.getElementById('btnPlayPause');
-const iconPlayPause = document.getElementById('iconPlayPause');
-const btnNext = document.getElementById('btnNext');
-const btnPrev = document.getElementById('btnPrev');
-const amProgress = document.getElementById('amProgress');
-const timeCurrent = document.getElementById('timeCurrent');
-const timeTotal = document.getElementById('timeTotal');
-const queueList = document.getElementById('queueList');
-const btnQueueHeader = document.getElementById('btnQueueHeader');
-const btnQueueIcon = document.getElementById('btnQueueIcon');
-const queueChevron = document.getElementById('queueChevron');
-const overlay = document.getElementById('intro-overlay');
-const btnStar = document.getElementById('btnStar');
-const btnMore = document.getElementById('btnMore');
-const amScrubber = document.getElementById('amScrubber');
-const btnLyrics = document.getElementById('btnLyrics');
-const btnRadio = document.getElementById('btnRadio');
-
-function initPlayer() {
-  loadTrack(currentTrack);
-  renderQueue();
-}
-
-// 🛡️ IRONCLAD FALLBACK SYSTEM
-function getArtHTML(track, sizePx) {
-  if (track.imgUrl) {
-    return `
-      <img src="${track.imgUrl}" class="cover-img" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-      <div style="display:none; width:100%; height:100%; background:${track.fallbackBg}; align-items:center; justify-content:center; border-radius:inherit;">
-        <span class="emoji" style="font-size:${sizePx}px">${track.emoji}</span>
-      </div>
-    `;
-  } else {
-    return `
-      <div style="display:flex; width:100%; height:100%; background:${track.fallbackBg}; align-items:center; justify-content:center; border-radius:inherit;">
-        <span class="emoji" style="font-size:${sizePx}px">${track.emoji}</span>
-      </div>
-    `;
-  }
-}
-
-function loadTrack(index) {
-  const track = playlist[index];
-  
-  // Only change the source if it is actually different 
-  if(audio.src !== track.src) {
-    audio.src = track.src;
-  }
-  
-  // Update text
-  islandTitle.innerText = track.title;
-  islandArtist.innerText = track.artist;
-  amTitle.innerText = track.title;
-  amArtist.innerText = track.artist;
-
-  // Inject HTML structure inside the art containers
-  islandArt.innerHTML = getArtHTML(track, 16);
-  amArtContainer.innerHTML = getArtHTML(track, 100);
-  
-  // Reset scrubber UI
-  amProgress.style.width = '0%';
-  timeCurrent.innerText = '0:00';
-  timeTotal.innerText = '-0:00';
-  
-  updateQueueUI();
-}
-
-function playAudioWithCatch() {
-  audio.play().catch(e => {
-    console.error("Playback failed. The MP3 link might be dead, or Safari blocked it:", e);
-  });
-}
-
-function togglePlay() {
-  if (audio.paused) {
-    playAudioWithCatch();
-  } else {
-    audio.pause();
-  }
-}
-
-// Toggle Queue Visibility
-function toggleQueue() {
-  queueList.classList.toggle('collapsed');
-  queueChevron.innerText = queueList.classList.contains('collapsed') ? '▼' : '▲';
-}
-btnQueueHeader.addEventListener('click', toggleQueue);
-btnQueueIcon.addEventListener('click', toggleQueue);
-
-// Bind UI strictly to native audio events
-audio.addEventListener('play', () => {
-  island.classList.add('playing'); 
-  amArtContainer.classList.remove('paused');
-  iconPlayPause.innerText = "⏸";
-});
-
-audio.addEventListener('pause', () => {
-  island.classList.remove('playing');
-  amArtContainer.classList.add('paused');
-  iconPlayPause.innerText = "▶";
-});
-
-function nextTrack() {
-  currentTrack = (currentTrack + 1) % playlist.length;
-  loadTrack(currentTrack);
-  playAudioWithCatch();
-}
-
-function prevTrack() {
-  currentTrack = (currentTrack - 1 + playlist.length) % playlist.length;
-  loadTrack(currentTrack);
-  playAudioWithCatch();
-}
-
-// Event Listeners for Player Controls
-btnPlayPause.addEventListener('click', togglePlay);
-btnNext.addEventListener('click', nextTrack);
-btnPrev.addEventListener('click', prevTrack);
-btnStar.addEventListener('click', () => {
-  const starSpan = btnStar.querySelector('.emoji');
-  if (starSpan.innerText === '☆') {
-    starSpan.innerText = '★';
-    starSpan.style.color = '#ff8fc0'; 
-  } else {
-    starSpan.innerText = '☆';
-    starSpan.style.color = '#fff';
-  }
-});
-
-amScrubber.addEventListener('click', (e) => {
-  if (audio.duration && !isNaN(audio.duration)) {
-    const rect = amScrubber.getBoundingClientRect();
-    const percent = (e.clientX - rect.left) / rect.width;
-    audio.currentTime = percent * audio.duration;
-  }
-});
-
-const comingSoonAlert = () => alert("Marella says you should be dancing, not playing with the app! 💃✨");
-btnMore.addEventListener('click', comingSoonAlert);
-btnLyrics.addEventListener('click', comingSoonAlert);
-btnRadio.addEventListener('click', comingSoonAlert);
-island.addEventListener('click', (e) => {
-  e.stopPropagation(); togglePlay();
-});
-
-overlay.addEventListener('click', () => {
-  playAudioWithCatch(); 
-  overlay.style.opacity = '0';
-  overlay.style.transform = 'scale(1.1)'; 
-  setTimeout(() => { overlay.style.display = 'none'; }, 600);
-});
-
-// Auto-play next track when current finishes
-audio.addEventListener('ended', nextTrack);
-
-// Handle duration parsing when song loads
-audio.addEventListener('loadedmetadata', () => {
-  if (audio.duration && !isNaN(audio.duration)) {
-    timeTotal.innerText = "-" + formatTime(audio.duration);
-  }
-});
-
-// Update Scrubber
-audio.addEventListener('timeupdate', () => {
-  if (audio.duration && !isNaN(audio.duration)) {
-    const percent = (audio.currentTime / audio.duration) * 100;
-    amProgress.style.width = percent + '%';
-    timeCurrent.innerText = formatTime(audio.currentTime);
-    
-    // Apple music style negative remaining time
-    const remaining = audio.duration - audio.currentTime;
-    timeTotal.innerText = "-" + formatTime(remaining);
-  }
-});
-
-function formatTime(seconds) {
-  if(isNaN(seconds)) return "0:00";
-  const min = Math.floor(seconds / 60);
-  const sec = Math.floor(seconds % 60);
-  return `${min}:${sec < 10 ? '0' : ''}${sec}`;
-}
-
-// Render the Queue List
-function renderQueue() {
-  queueList.innerHTML = '';
-  playlist.forEach((track, i) => {
-    const item = document.createElement('div');
-    item.className = `am-queue-item ${i === currentTrack ? 'active' : ''}`;
-    
-    item.innerHTML = `
-      <div class="am-queue-art">
-        ${getArtHTML(track, 20)}
-      </div>
-      <div class="am-queue-text">
-        <div class="am-queue-title-text">${track.title}</div>
-        <div class="am-queue-artist-text">${track.artist}</div>
-      </div>
-    `;
-    item.addEventListener('click', () => {
-      currentTrack = i;
-      loadTrack(currentTrack);
-      playAudioWithCatch();
-    });
-    queueList.appendChild(item);
-  });
-}
-
-function updateQueueUI() {
-  const items = queueList.querySelectorAll('.am-queue-item');
-  items.forEach((item, i) => {
-    if(i === currentTrack) item.classList.add('active');
-    else item.classList.remove('active');
-  });
-}
-
-// Initialize on load
-initPlayer();
+      // ==========================================
 
 
-// ==========================================
-// --- NAVIGATION LOGIC ---
-// ==========================================
-const navItems = document.querySelectorAll('.nav .item');
-const views = document.querySelectorAll('.view');
-function activateTab(index) {
-  navItems.forEach(x => x.classList.remove('active'));
-  navItems[index].classList.add('active');
-  views.forEach(x => x.classList.remove('active'));
-  document.getElementById(`view-${index}`).classList.add('active');
-  
-  // Hide the dynamic island on the Music tab (index 4)
-  if (index === 4) {
-    island.style.display = 'none';
-  } else {
-    island.style.display = 'flex';
-  }
-}
-navItems.forEach((el, index) => el.addEventListener('click', () => activateTab(index)));
-document.getElementById('homeRsvpBtn').addEventListener('click', () => activateTab(2));
+
+      const kimPetrasImgURL = "https://i.discogs.com/iDn6Q8F8wVo2bAn88dmxM4xhVPMKiW_gNBp7oBdAOTA/rs:fit/g:sm/q:90/h:520/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTI2NjU3/NzMyLTE2ODA3MDQz/NDYtOTQxMy5qcGVn.jpeg";
+
+      const cupcakkeImgURL = "https://cdn-images.dzcdn.net/images/cover/1201b401ce5b34210eb9f61adaf9dd58/1900x1900-000000-80-0-0.jpg";
+
+      const coconutsImgURL = "https://upload.wikimedia.org/wikipedia/en/a/a8/Kim_Petras_-_Coconuts.png";
+
+      const BestFriendImgURL = "https://file.garden/ad-wGPVIV3ilAD_L/Bridal%20Arell/pic/IMG_8083.jpeg";
+
+      const ShortandSweetImgURL = "https://file.garden/ad-wGPVIV3ilAD_L/Bridal%20Arell/IMG_8087.jpeg";
+
+      const ArianaImgURL = "https://file.garden/ad-wGPVIV3ilAD_L/Bridal%20Arell/IMG_8086.jpeg";
 
 
-// ==========================================
-// --- QRIS MODAL LOGIC ---
-// ==========================================
-const qrisBtn = document.getElementById('qrisBtn');
-const qrisModal = document.getElementById('qris-modal');
-const closeQrisBtn = document.getElementById('closeQrisBtn');
-qrisBtn.addEventListener('click', () => qrisModal.classList.add('show'));
-closeQrisBtn.addEventListener('click', () => qrisModal.classList.remove('show'));
-qrisModal.addEventListener('click', (e) => { if(e.target === qrisModal) qrisModal.classList.remove('show'); });
+
+      const playlist = [
+
+        { title: "Espresso", artist: "Sabrina Carpenter", src: "https://file.garden/ad-wGPVIV3ilAD_L/Bridal%20Arell/Sabrina%20Carpenter%20%E2%80%93%20Espresso.mp3", emoji: "💦", fallbackBg: "linear-gradient(135deg, #ff8fc0, #7aa6ff)", imgUrl: ShortandSweetImgURL },
+
+        { title: "Please, Please, Please", artist: "Sabrina Carpenter", src: "https://file.garden/ad-wGPVIV3ilAD_L/Bridal%20Arell/Sabrina%20Carpenter%20%E2%80%93%20Please%20Please%20Please.mp3", emoji: "💦", fallbackBg: "linear-gradient(135deg, #ff8fc0, #7aa6ff)", imgUrl: ShortandSweetImgURL },
+
+        { title: "They Wanna Fuck", artist: "Kim Petras", src: "https://file.garden/ad-wGPVIV3ilAD_L/Bridal%20Arell/Kim%20Petras%20%E2%80%93%20They%20Wanna%20Fuck.mp3", emoji: "💦", fallbackBg: "linear-gradient(135deg, #ff8fc0, #7aa6ff)", imgUrl: kimPetrasImgURL },
+
+        { title: "34+35", artist: "Ariana Grande", src: "https://file.garden/ad-wGPVIV3ilAD_L/Bridal%20Arell/Ariana%20Grande%20%E2%80%93%2034%2B35.mp3", emoji: "💦", fallbackBg: "linear-gradient(135deg, #ff8fc0, #7aa6ff)", imgUrl: ArianaImgURL },
+
+        // 👇 IF THIS DOESN'T PLAY, PASTE YOUR NEW AUDIO LINK BELOW 👇
+
+        { title: "Treat Me Like a Slut", artist: "Kim Petras", src: "https://file.garden/ad-wGPVIV3ilAD_L/Bridal%20Arell/2-Kim-Petras-Treat-Me-Like-A-Slut-MIHVMQ.mp3", emoji: "🔥", fallbackBg: "linear-gradient(135deg, #ff5e62, #ff9966)", imgUrl: kimPetrasImgURL },
+
+        { title: "Tears", artist: "Sabrina Carpenter", src: "https://file.garden/ad-wGPVIV3ilAD_L/Bridal%20Arell/Sabrina%20Carpenter%20%E2%80%93%20Tears.mp3", emoji: "🎀", fallbackBg: "linear-gradient(135deg, #ff5e62, #ff9966)", imgUrl: BestFriendImgURL },
+
+        { title: "Juno", artist: "Sabrina Carpenter", src: "https://file.garden/ad-wGPVIV3ilAD_L/Bridal%20Arell/Sabrina%20Carpenter%20%E2%80%93%20Juno.mp3", emoji: "🍰", fallbackBg: "linear-gradient(135deg, #ff5e62, #ff9966)", imgUrl: ShortandSweetImgURL },
+
+        { title: "Throat Goat", artist: "Kim Petras", src: "https://file.garden/ad-wGPVIV3ilAD_L/Bridal%20Arell/5-Kim-Petras-Throat-Goat-VBLX5B.mp3", emoji: "🍆", fallbackBg: "linear-gradient(135deg, #ff5e62, #ff9966)", imgUrl: kimPetrasImgURL },
+
+        { title: "Bed Chem", artist: "Sabrina Carpenter", src: "https://file.garden/ad-wGPVIV3ilAD_L/Bridal%20Arell/Sabrina%20Carpenter%20%E2%80%93%20Bed%20Chem.mp3", emoji: "💧", fallbackBg: "linear-gradient(135deg, #ff5e62, #ff9966)", imgUrl: ShortandSweetImgURL },
+
+        { title: "XXX", artist: "Kim Petras", src: "https://file.garden/ad-wGPVIV3ilAD_L/Bridal%20Arell/3-Kim-Petras-XXX-784R1S.mp3", emoji: "🍌", fallbackBg: "linear-gradient(135deg, #ff5e62, #ff9966)", imgUrl: kimPetrasImgURL },
+
+        { title: "Coconuts", artist: "Kim Petras", src: "https://file.garden/ad-wGPVIV3ilAD_L/Bridal%20Arell/1-Kim-Petras-Coconuts-7U493T.mp3", emoji: "🥥", fallbackBg: "linear-gradient(135deg, #ff5e62, #ff9966)", imgUrl: coconutsImgURL },
+
+        { title: "CPR", artist: "CupcakKe", src: "https://file.garden/ad-wGPVIV3ilAD_L/Bridal%20Arell/3-cupcakKe-Cpr-7ADPAT.mp3", emoji: "🏥", fallbackBg: "linear-gradient(135deg, #ff5e62, #ff9966)", imgUrl: cupcakkeImgURL }
+
+      ];
 
 
-// ==========================================
-// --- GOOGLE SHEETS RSVP LOGIC ---
-// ==========================================
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzEHZuI328ORHNOfmKqt3lqhvdPDGiFc_xnkoOikpiQx3djidoL9RUgkG4r9bz26a2gZA/exec"; 
-const btnYes = document.getElementById('btnYes');
-const btnNo = document.getElementById('btnNo');
-const messageEl = document.getElementById('rsvpMessage');
-const nameInput = document.getElementById('rsvpName');
-const emailInput = document.getElementById('rsvpEmail');
 
-btnYes.addEventListener('click', () => submitRSVP('Attending'));
-btnNo.addEventListener('click', () => submitRSVP('Not Attending'));
+      for (let i = playlist.length - 1; i > 0; i--) {
 
-function submitRSVP(status) {
-  const name = nameInput.value.trim();
-  const email = emailInput.value.trim();
+        const j = Math.floor(Math.random() * (i + 1));
 
-  if (!name) { alert("Please enter your First & Last name!"); return; }
+        [playlist[i], playlist[j]] = [playlist[j], playlist[i]];
 
-  btnYes.disabled = true; btnNo.disabled = true;
-  messageEl.style.display = 'block'; messageEl.style.color = '#666';
-  messageEl.innerText = "Sending RSVP...";
-
-  const payload = { name: name, email: email || "No email provided", status: status };
-
-  fetch(GOOGLE_SCRIPT_URL, {
-    method: 'POST', mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  }).then(() => showSuccess(status))
-    .catch(() => {
-      messageEl.innerText = "Oops, something went wrong. Please try again.";
-      messageEl.style.color = "red"; btnYes.disabled = false; btnNo.disabled = false;
-  });
-}
-
-function showSuccess(status) {
-  messageEl.style.color = "#2b1b3d";
-  if (status === 'Attending') messageEl.innerText = "Yay! We can't wait to see you! 🎉";
-  else messageEl.innerText = "We'll miss you! 🤍";
-  nameInput.value = ''; emailInput.value = '';
-  setTimeout(() => { btnYes.disabled = false; btnNo.disabled = false; messageEl.style.display = 'none'; }, 3000);
-}
+      }
 
 
-// ==========================================
-// --- COUNTDOWN LOGIC ---
-// ==========================================
-const target = new Date("April 19, 2026 12:00:00").getTime();
-setInterval(() => {
-  const now = Date.now();
-  let diff = target - now; if (diff < 0) diff = 0;
-  const dEl = document.getElementById('d'); if (!dEl) return;
-  
-  const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-  const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-  const s = Math.floor((diff % (1000 * 60)) / 1000);
 
-  dEl.innerText = d.toString().padStart(2, '0');
-  document.getElementById('h').innerText = h.toString().padStart(2, '0');
-  document.getElementById('m').innerText = m.toString().padStart(2, '0');
-  document.getElementById('s').innerText = s.toString().padStart(2, '0');
-}, 1000);
-</script>
+      let currentTrack = 0;
 
-</body>
+      const audio = document.getElementById('bgm');
+
+
+
+      // Island Elements
+
+      const island = document.getElementById('audioToggle');
+
+      const islandTitle = document.getElementById('islandTitle');
+
+      const islandArtist = document.getElementById('islandArtist');
+
+      const islandArt = document.getElementById('islandArt');
+
+
+
+      // AM Player Elements
+
+      const amTitle = document.getElementById('amTitle');
+
+      const amArtist = document.getElementById('amArtist');
+
+      const amArtContainer = document.getElementById('amArtContainer');
+
+      const btnPlayPause = document.getElementById('btnPlayPause');
+
+      const iconPlayPause = document.getElementById('iconPlayPause');
+
+      const btnNext = document.getElementById('btnNext');
+
+      const btnPrev = document.getElementById('btnPrev');
+
+      const amProgress = document.getElementById('amProgress');
+
+      const timeCurrent = document.getElementById('timeCurrent');
+
+      const timeTotal = document.getElementById('timeTotal');
+
+      const queueList = document.getElementById('queueList');
+
+      const btnQueueHeader = document.getElementById('btnQueueHeader');
+
+      const btnQueueIcon = document.getElementById('btnQueueIcon');
+
+      const queueChevron = document.getElementById('queueChevron');
+
+      const overlay = document.getElementById('intro-overlay');
+
+      const btnStar = document.getElementById('btnStar');
+
+      const btnMore = document.getElementById('btnMore');
+
+      const amScrubber = document.getElementById('amScrubber');
+
+      const btnLyrics = document.getElementById('btnLyrics');
+
+      const btnRadio = document.getElementById('btnRadio');
+
+
+
+      function initPlayer() {
+
+        loadTrack(currentTrack);
+
+        renderQueue();
+
+      }
+
+
+
+      // 🛡️ IRONCLAD FALLBACK SYSTEM
+
+      function getArtHTML(track, sizePx) {
+
+        if (track.imgUrl) {
+
+          return `
+
+            <img src="${track.imgUrl}" class="cover-img" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+
+            <div style="display:none; width:100%; height:100%; background:${track.fallbackBg}; align-items:center; justify-content:center; border-radius:inherit;">
+
+              <span class="emoji" style="font-size:${sizePx}px">${track.emoji}</span>
+
+            </div>
+
+          `;
+
+        } else {
+
+          return `
+
+            <div style="display:flex; width:100%; height:100%; background:${track.fallbackBg}; align-items:center; justify-content:center; border-radius:inherit;">
+
+              <span class="emoji" style="font-size:${sizePx}px">${track.emoji}</span>
+
+            </div>
+
+          `;
+
+        }
+
+      }
+
+
+
+      function loadTrack(index) {
+
+        const track = playlist[index];
+
+
+
+        // Only change the source if it is actually different
+
+        if(audio.src !== track.src) {
+
+          audio.src = track.src;
+
+        }
+
+
+
+        // Update text
+
+        islandTitle.innerText = track.title;
+
+        islandArtist.innerText = track.artist;
+
+        amTitle.innerText = track.title;
+
+        amArtist.innerText = track.artist;
+
+
+
+        // Inject HTML structure inside the art containers
+
+        islandArt.innerHTML = getArtHTML(track, 16);
+
+        amArtContainer.innerHTML = getArtHTML(track, 100);
+
+
+
+        // Reset scrubber UI
+
+        amProgress.style.width = '0%';
+
+        timeCurrent.innerText = '0:00';
+
+        timeTotal.innerText = '-0:00';
+
+
+
+        updateQueueUI();
+
+      }
+
+
+
+      function playAudioWithCatch() {
+
+        audio.play().catch(e => {
+
+          console.error("Playback failed. The MP3 link might be dead, or Safari blocked it:", e);
+
+        });
+
+      }
+
+
+
+      function togglePlay() {
+
+        if (audio.paused) {
+
+          playAudioWithCatch();
+
+        } else {
+
+          audio.pause();
+
+        }
+
+      }
+
+
+
+      // Toggle Queue Visibility
+
+      function toggleQueue() {
+
+        queueList.classList.toggle('collapsed');
+
+        queueChevron.innerText = queueList.classList.contains('collapsed') ? '▼' : '▲';
+
+      }
+
+      btnQueueHeader.addEventListener('click', toggleQueue);
+
+      btnQueueIcon.addEventListener('click', toggleQueue);
+
+
+
+      // Bind UI strictly to native audio events
+
+      audio.addEventListener('play', () => {
+
+        island.classList.add('playing');
+
+        amArtContainer.classList.remove('paused');
+
+        iconPlayPause.innerText = "⏸";
+
+      });
+
+
+
+      audio.addEventListener('pause', () => {
+
+        island.classList.remove('playing');
+
+        amArtContainer.classList.add('paused');
+
+        iconPlayPause.innerText = "▶";
+
+      });
+
+
+
+      function nextTrack() {
+
+        currentTrack = (currentTrack + 1) % playlist.length;
+
+        loadTrack(currentTrack);
+
+        playAudioWithCatch();
+
+      }
+
+
+
+      function prevTrack() {
+
+        currentTrack = (currentTrack - 1 + playlist.length) % playlist.length;
+
+        loadTrack(currentTrack);
+
+        playAudioWithCatch();
+
+      }
+
+
+
+      // Event Listeners for Player Controls
+
+      btnPlayPause.addEventListener('click', togglePlay);
+
+      btnNext.addEventListener('click', nextTrack);
+
+      btnPrev.addEventListener('click', prevTrack);
+
+      btnStar.addEventListener('click', () => {
+
+        const starSpan = btnStar.querySelector('.emoji');
+
+        if (starSpan.innerText === '☆') {
+
+          starSpan.innerText = '★';
+
+          starSpan.style.color = '#ff8fc0';
+
+        } else {
+
+          starSpan.innerText = '☆';
+
+          starSpan.style.color = '#fff';
+
+        }
+
+      });
+
+
+
+      amScrubber.addEventListener('click', (e) => {
+
+        if (audio.duration && !isNaN(audio.duration)) {
+
+          const rect = amScrubber.getBoundingClientRect();
+
+          const percent = (e.clientX - rect.left) / rect.width;
+
+          audio.currentTime = percent * audio.duration;
+
+        }
+
+      });
+
+
+
+      const comingSoonAlert = () => alert("Marella says you should be dancing, not playing with the app! 💃✨");
+
+      btnMore.addEventListener('click', comingSoonAlert);
+
+      btnLyrics.addEventListener('click', comingSoonAlert);
+
+      btnRadio.addEventListener('click', comingSoonAlert);
+
+      island.addEventListener('click', (e) => {
+
+        e.stopPropagation(); togglePlay();
+
+      });
+
+
+
+      overlay.addEventListener('click', () => {
+
+        playAudioWithCatch();
+
+        overlay.style.opacity = '0';
+
+        overlay.style.transform = 'scale(1.1)';
+
+        setTimeout(() => { overlay.style.display = 'none'; }, 600);
+
+      });
+
+
+
+      // Auto-play next track when current finishes
+
+      audio.addEventListener('ended', nextTrack);
+
+
+
+      // Handle duration parsing when song loads
+
+      audio.addEventListener('loadedmetadata', () => {
+
+        if (audio.duration && !isNaN(audio.duration)) {
+
+          timeTotal.innerText = "-" + formatTime(audio.duration);
+
+        }
+
+      });
+
+
+
+      // Update Scrubber
+
+      audio.addEventListener('timeupdate', () => {
+
+        if (audio.duration && !isNaN(audio.duration)) {
+
+          const percent = (audio.currentTime / audio.duration) * 100;
+
+          amProgress.style.width = percent + '%';
+
+          timeCurrent.innerText = formatTime(audio.currentTime);
+
+
+
+          // Apple music style negative remaining time
+
+          const remaining = audio.duration - audio.currentTime;
+
+          timeTotal.innerText = "-" + formatTime(remaining);
+
+        }
+
+      });
+
+
+
+      function formatTime(seconds) {
+
+        if(isNaN(seconds)) return "0:00";
+
+        const min = Math.floor(seconds / 60);
+
+        const sec = Math.floor(seconds % 60);
+
+        return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+
+      }
+
+
+
+      // Render the Queue List
+
+      function renderQueue() {
+
+        queueList.innerHTML = '';
+
+        playlist.forEach((track, i) => {
+
+          const item = document.createElement('div');
+
+          item.className = `am-queue-item ${i === currentTrack ? 'active' : ''}`;
+
+
+
+          item.innerHTML = `
+
+            <div class="am-queue-art">
+
+              ${getArtHTML(track, 20)}
+
+            </div>
+
+            <div class="am-queue-text">
+
+              <div class="am-queue-title-text">${track.title}</div>
+
+              <div class="am-queue-artist-text">${track.artist}</div>
+
+            </div>
+
+          `;
+
+          item.addEventListener('click', () => {
+
+            currentTrack = i;
+
+            loadTrack(currentTrack);
+
+            playAudioWithCatch();
+
+          });
+
+          queueList.appendChild(item);
+
+        });
+
+      }
+
+
+
+      function updateQueueUI() {
+
+        const items = queueList.querySelectorAll('.am-queue-item');
+
+        items.forEach((item, i) => {
+
+          if(i === currentTrack) item.classList.add('active');
+
+          else item.classList.remove('active');
+
+        });
+
+      }
+
+
+
+      // Initialize on load
+
+      initPlayer();
+
+
+
+
+
+      // ==========================================
+
+      // --- NAVIGATION LOGIC ---
+
+      // ==========================================
+
+      const navItems = document.querySelectorAll('.nav .item');
+
+      const views = document.querySelectorAll('.view');
+
+      function activateTab(index) {
+
+        navItems.forEach(x => x.classList.remove('active'));
+
+        navItems[index].classList.add('active');
+
+        views.forEach(x => x.classList.remove('active'));
+
+        document.getElementById(`view-${index}`).classList.add('active');
+
+
+
+        // Hide the dynamic island on the Music tab (index 4)
+
+        if (index === 4) {
+
+          island.style.display = 'none';
+
+        } else {
+
+          island.style.display = 'flex';
+
+        }
+
+      }
+
+      navItems.forEach((el, index) => el.addEventListener('click', () => activateTab(index)));
+
+      document.getElementById('homeRsvpBtn').addEventListener('click', () => activateTab(2));
+
+
+
+
+
+      // ==========================================
+
+      // --- QRIS MODAL LOGIC ---
+
+      // ==========================================
+
+      const qrisBtn = document.getElementById('qrisBtn');
+
+      const qrisModal = document.getElementById('qris-modal');
+
+      const closeQrisBtn = document.getElementById('closeQrisBtn');
+
+      qrisBtn.addEventListener('click', () => qrisModal.classList.add('show'));
+
+      closeQrisBtn.addEventListener('click', () => qrisModal.classList.remove('show'));
+
+      qrisModal.addEventListener('click', (e) => { if(e.target === qrisModal) qrisModal.classList.remove('show'); });
+
+
+
+
+
+      // ==========================================
+
+      // --- GOOGLE SHEETS RSVP LOGIC ---
+
+      // ==========================================
+
+      const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzEHZuI328ORHNOfmKqt3lqhvdPDGiFc_xnkoOikpiQx3djidoL9RUgkG4r9bz26a2gZA/exec";
+
+      const btnYes = document.getElementById('btnYes');
+
+      const btnNo = document.getElementById('btnNo');
+
+      const messageEl = document.getElementById('rsvpMessage');
+
+      const nameInput = document.getElementById('rsvpName');
+
+      const emailInput = document.getElementById('rsvpEmail');
+
+
+
+      btnYes.addEventListener('click', () => submitRSVP('Attending'));
+
+      btnNo.addEventListener('click', () => submitRSVP('Not Attending'));
+
+
+
+      function submitRSVP(status) {
+
+        const name = nameInput.value.trim();
+
+        const email = emailInput.value.trim();
+
+
+
+        if (!name) { alert("Please enter your First & Last name!"); return; }
+
+
+
+        btnYes.disabled = true; btnNo.disabled = true;
+
+        messageEl.style.display = 'block'; messageEl.style.color = '#666';
+
+        messageEl.innerText = "Sending RSVP...";
+
+
+
+        const payload = { name: name, email: email || "No email provided", status: status };
+
+
+
+        fetch(GOOGLE_SCRIPT_URL, {
+
+          method: 'POST', mode: 'no-cors',
+
+          headers: { 'Content-Type': 'application/json' },
+
+          body: JSON.stringify(payload)
+
+        }).then(() => showSuccess(status))
+
+          .catch(() => {
+
+            messageEl.innerText = "Oops, something went wrong. Please try again.";
+
+            messageEl.style.color = "red"; btnYes.disabled = false; btnNo.disabled = false;
+
+        });
+
+      }
+
+
+
+      function showSuccess(status) {
+
+        messageEl.style.color = "#2b1b3d";
+
+        if (status === 'Attending') messageEl.innerText = "Yay! We can't wait to see you! 🎉";
+
+        else messageEl.innerText = "We'll miss you! 🤍";
+
+        nameInput.value = ''; emailInput.value = '';
+
+        setTimeout(() => { btnYes.disabled = false; btnNo.disabled = false; messageEl.style.display = 'none'; }, 3000);
+
+      }
+
+
+
+
+
+      // ==========================================
+
+      // --- COUNTDOWN LOGIC ---
+
+      // ==========================================
+
+      const target = new Date("April 19, 2026 12:00:00").getTime();
+
+      setInterval(() => {
+
+        const now = Date.now();
+
+        let diff = target - now; if (diff < 0) diff = 0;
+
+        const dEl = document.getElementById('d'); if (!dEl) return;
+
+
+
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+        const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+
+        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+        const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+
+
+        dEl.innerText = d.toString().padStart(2, '0');
+
+        document.getElementById('h').innerText = h.toString().padStart(2, '0');
+
+        document.getElementById('m').innerText = m.toString().padStart(2, '0');
+
+        document.getElementById('s').innerText = s.toString().padStart(2, '0');
+
+      }, 1000);
+    </script>
+  </body>
 </html>

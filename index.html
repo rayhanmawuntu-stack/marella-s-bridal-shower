@@ -166,7 +166,7 @@ body { background: radial-gradient(circle at top, #ff8fc0, #7aa6ff 60%, #5f7cff)
 
 .am-queue-header { display: flex; justify-content: space-between; align-items: center; margin-top: 40px; margin-bottom: 14px; cursor: pointer; padding: 10px 0; }
 .am-queue-title { font-size: 18px; font-weight: 700; color: #fff; margin: 0;}
-.am-queue-list { display: flex; flex-direction: column; gap: 10px; max-height: 500px; opacity: 1; transition: all 0.3s ease; overflow: hidden; }
+.am-queue-list { display: flex; flex-direction: column; gap: 10px; max-height: 500px; opacity: 1; transition: all 0.3s ease; overflow-y: auto; overflow-x: hidden; }
 .am-queue-list.collapsed { max-height: 0; opacity: 0; margin: 0; }
 .am-queue-item { display: flex; align-items: center; gap: 14px; padding: 10px; border-radius: 12px; transition: 0.2s; cursor: pointer; background: rgba(255,255,255,0.05);}
 .am-queue-item:active { transform: scale(0.98); }

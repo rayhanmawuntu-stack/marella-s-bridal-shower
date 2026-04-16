@@ -422,9 +422,14 @@ const playlist = [
   { title: "Bed Chem", artist: "Sabrina Carpenter", src: "https://file.garden/ad-wGPVIV3ilAD_L/Bridal%20Arell/Sabrina%20Carpenter%20%E2%80%93%20Bed%20Chem.mp3", emoji: "💧", fallbackBg: "linear-gradient(135deg, #ff5e62, #ff9966)", imgUrl: ShortandSweetImgURL },
   { title: "XXX", artist: "Kim Petras", src: "https://file.garden/ad-wGPVIV3ilAD_L/Bridal%20Arell/3-Kim-Petras-XXX-784R1S.mp3", emoji: "🍌", fallbackBg: "linear-gradient(135deg, #ff5e62, #ff9966)", imgUrl: kimPetrasImgURL },
   { title: "Coconuts", artist: "Kim Petras", src: "https://file.garden/ad-wGPVIV3ilAD_L/Bridal%20Arell/1-Kim-Petras-Coconuts-7U493T.mp3", emoji: "🥥", fallbackBg: "linear-gradient(135deg, #ff5e62, #ff9966)", imgUrl: coconutsImgURL },
-  { title: "CPR", artist: "CupcakKe", src: "https://file.garden/ad-wGPVIV3ilAD_L/Bridal%20Arell/3-cupcakKe-Cpr-7ADPAT.mp3", emoji: "🍌", fallbackBg: "linear-gradient(135deg, #ff5e62, #ff9966)", imgUrl: cupcakkeImgURL }
+  { title: "CPR", artist: "CupcakKe", src: "https://file.garden/ad-wGPVIV3ilAD_L/Bridal%20Arell/3-cupcakKe-Cpr-7ADPAT.mp3", emoji: "🏥", fallbackBg: "linear-gradient(135deg, #ff5e62, #ff9966)", imgUrl: cupcakkeImgURL }
 ];
 
+for (let i = playlist.length - 1; i > 0; i--) {
+  const j = Math.floor(Math.random() * (i + 1));
+  [playlist[i], playlist[j]] = [playlist[j], playlist[i]];
+}  
+  
 let currentTrack = 0;
 const audio = document.getElementById('bgm');
 

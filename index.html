@@ -81,6 +81,21 @@ body { background: radial-gradient(circle at top, #ff8fc0, #7aa6ff 60%, #5f7cff)
 /* UI COMPONENTS */
 .card { background: rgba(255,255,255,.9); border-radius: 22px; padding: 16px; margin-bottom: 14px; display: flex; gap: 14px; align-items: center; box-shadow: 0 6px 20px rgba(0,0,0,.08), inset 0 1px 0 rgba(255,255,255,.7); cursor: pointer; }
 .card:active { transform: scale(0.98); }
+.cal-btn { 
+  flex: 1; 
+  padding: 8px; 
+  border-radius: 12px; 
+  background: rgba(0,0,0,0.05); 
+  border: 1px solid rgba(0,0,0,0.05);
+  font-size: 11px; 
+  font-weight: 600; 
+  color: #ff76ac; 
+  text-align: center; 
+  cursor: pointer;
+  margin-top: 8px;
+}
+.cal-btn:active { background: rgba(0,0,0,0.1); }
+.cal-row { display: flex; gap: 8px; width: 100%; }
 .card-column { flex-direction: column; align-items: flex-start; gap: 8px; cursor: default; } .card-column:active { transform: none; }
 .icon { width: 50px; height: 50px; border-radius: 16px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,.1); font-size: 20px; flex-shrink: 0; }
 .date { background: #ffd6e0; } .time { background: #ffe9a8; } .location { background: #d6ffe0; } .dress { background: #e0d6ff; } .gift { background: #ffebd6; } .qris-icon { background: #e0f7fa; } .photo { background: #e6f2ff; }
@@ -217,9 +232,19 @@ body { background: radial-gradient(circle at top, #ff8fc0, #7aa6ff 60%, #5f7cff)
     </div>
     <div class="sheet">
       <div class="card" style="cursor: default;">
-        <div class="icon date"><span class="emoji">📅</span></div>
-        <div><div class="card-title">DATE</div><div class="card-main">Sunday, April 19th 2026</div></div>
-      </div>
+       <div class="card card-column" style="cursor: default;">
+  <div style="display: flex; gap: 14px; align-items: center; width: 100%;">
+    <div class="icon date"><span class="emoji">📅</span></div>
+    <div>
+      <div class="card-title">DATE</div>
+      <div class="card-main">Sunday, April 19th 2026</div>
+    </div>
+  </div>
+  <div class="cal-row">
+    <div class="cal-btn" onclick="addToGoogleCalendar()">+ Google Calendar</div>
+    <div class="cal-btn" onclick="downloadICS()">+ Apple / Outlook</div>
+  </div>
+</div>
       <div class="card" style="cursor: default;">
         <div class="icon time"><span class="emoji">⏰</span></div>
         <div><div class="card-title">TIME</div><div class="card-main">12:00 PM</div></div>
@@ -743,7 +768,42 @@ function showSuccess(status) {
   setTimeout(() => { btnYes.disabled = false; btnNo.disabled = false; messageEl.style.display = 'none'; }, 3000);
 }
 
+// ==========================================
+// --- CALENDAR LOGIC ---
+// ==========================================
+function addToGoogleCalendar() {
+  const details = {
+    text: "Marella's Bridal Shower 🎀",
+    dates: "20260419T050000Z/20260419T080000Z", // UTC Time (12pm-3pm WIB is 5am-8am UTC)
+    details: "Marella's special day! Open the app for location updates.",
+    location: "Location to be disclosed",
+  };
+  const url = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(details.text)}&dates=${details.dates}&details=${encodeURIComponent(details.details)}&location=${encodeURIComponent(details.location)}`;
+  window.open(url, '_blank');
+}
 
+function downloadICS() {
+  const icsMsg = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "BEGIN:VEVENT",
+    "DTSTART:20260419T050000Z",
+    "DTEND:20260419T080000Z",
+    "SUMMARY:Marella's Bridal Shower 🎀",
+    "DESCRIPTION:Marella's special day! Open the app for location updates.",
+    "LOCATION:Location to be disclosed",
+    "END:VEVENT",
+    "END:VCALENDAR"
+  ].join("\n");
+  
+  const blob = new Blob([icsMsg], { type: 'text/calendar;charset=utf-8' });
+  const url = window.URL.createObjectURL(blob);
+  const anchor = document.createElement('a');
+  anchor.href = url;
+  anchor.download = 'Marella-Bridal-Shower.ics';
+  anchor.click();
+  window.URL.revokeObjectURL(url);
+}
 // ==========================================
 // --- COUNTDOWN LOGIC ---
 // ==========================================

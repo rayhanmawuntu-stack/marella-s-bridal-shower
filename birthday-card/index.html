@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f8f7f3" />
+  <meta name="description" content="A playful birthday card hidden behind a tiny dinosaur runner game." />
+  <title>A Tiny Birthday Adventure</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <section id="gameScreen" class="screen game-screen" aria-labelledby="gameTitle">
+      <header class="game-header">
+        <div>
+          <p class="eyebrow">A tiny birthday adventure</p>
+          <h1 id="gameTitle">One more jump...</h1>
+        </div>
+        <div class="scoreboard" aria-live="polite">
+          <span>HI <strong id="highScore">00000</strong></span>
+          <span id="score">00000</span>
+        </div>
+      </header>
+
+      <div class="game-frame" id="gameFrame">
+        <canvas id="gameCanvas" width="960" height="360" aria-label="Dinosaur runner game"></canvas>
+        <div id="startOverlay" class="game-overlay">
+          <div class="pixel-dino" aria-hidden="true">🦖</div>
+          <h2>Help the dino reach the birthday surprise</h2>
+          <p>Jump over the cacti and catch the gift.</p>
+          <button id="startButton" class="primary-button" type="button">Start running</button>
+          <p class="control-hint">Space / ↑ / tap to jump</p>
+        </div>
+        <button id="jumpButton" class="jump-button" type="button" aria-label="Jump">JUMP</button>
+      </div>
+
+      <footer class="game-footer">
+        <span id="gameStatus">Ready when you are.</span>
+        <button id="skipButton" class="text-button" type="button">Skip to the card</button>
+      </footer>
+    </section>
+
+    <section id="cardScreen" class="screen card-screen" aria-labelledby="birthdayHeading" hidden>
+      <div id="confettiLayer" class="confetti-layer" aria-hidden="true"></div>
+      <div class="card-wrap">
+        <div class="card-topline">
+          <span class="mini-pill">SPECIAL DELIVERY</span>
+          <button id="replayButton" class="icon-button" type="button" aria-label="Replay game">↻</button>
+        </div>
+
+        <div class="cake" aria-hidden="true">
+          <div class="flame"></div>
+          <div class="candle"></div>
+          <div class="icing"></div>
+          <div class="cake-body"></div>
+          <div class="plate"></div>
+        </div>
+
+        <p class="card-kicker">You made it!</p>
+        <h2 id="birthdayHeading">Happy Birthday, <span id="recipientName">You</span>!</h2>
+        <p id="birthdayMessage" class="birthday-message">
+          I hope this new chapter brings you more calm mornings, loud laughs, lucky surprises,
+          and the kind of happiness that stays.
+        </p>
+
+        <div class="wish-box">
+          <span aria-hidden="true">✦</span>
+          <p>Make a wish. No pressure — the dino already did the hard part.</p>
+          <span aria-hidden="true">✦</span>
+        </div>
+
+        <p class="signature">With lots of love,<br /><strong id="senderName">Rayhan</strong></p>
+        <button id="celebrateButton" class="primary-button celebrate-button" type="button">Celebrate again 🎉</button>
+      </div>
+    </section>
+  </main>
+
+  <noscript>This birthday card needs JavaScript enabled to run the game.</noscript>
+  <script src="script.js"></script>
+</body>
+</html>
